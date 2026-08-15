@@ -20,13 +20,13 @@
 - [x] Respeto de prefers-reduced-motion y accesibilidad básica
 - [x] Responsive 100% mobile-first y verificación visual en desktop/móvil
 - [x] Tests Vitest para validación y procedimientos de captación/reserva
-- [x] Revisión de rendimiento, errores de consola y build: build OK; warning de bundle grande documentado
+- [ ] Revisión de rendimiento, errores de consola y build: build OK; falta cerrar la revisión histórica de consola
 - [ ] Checkpoint final antes de entregar
 - [ ] Implementar confirmación automática real por email al usuario tras lead/reserva
 - [ ] Sustituir galería genérica por módulo de antes/después con consentimiento visible
 - [ ] Implementar carrusel de testimonios sin inventar citas, fotos ni valoraciones
 - [ ] Configurar canal explícito para Jorge y gestionar fallos de notificación
-- [x] Revisar bundle, errores de consola y rendimiento: no hay errores nuevos; queda warning de chunk grande
+- [x] Optimizar bundle y revisar rendimiento: chunk principal reducido a ~505 kB y warning eliminado del build
 
 ## Notas de contenido
 
@@ -49,13 +49,13 @@
 - [ ] Confirmar el nuevo nombre exacto de marca si Jorge quiere sustituir “JORGE”
 - [x] Editar el hero para mostrar solo el cuerpo del modelo sin la cabeza
 - [x] Verificar que GSAP/ScrollTrigger y el responsive siguen funcionando tras los cambios
-- [ ] Localizar una repo propia existente y vacía para publicar la landing
-- [ ] Renombrar la repo vacía con un nombre disponible para el proyecto de Jorge
+- [x] Localizar una repo propia existente y vacía para publicar la landing
+- [x] Renombrar la repo vacía con un nombre disponible para el proyecto de Jorge
 - [x] Publicar y verificar la landing en la repo renombrada
 - [x] Auditoría completa de TypeScript, tests, build, esquema y migraciones
 - [x] Auditoría de GitHub, rama publicada y repo propia seleccionada
 - [x] Auditoría visual desktop y móvil, incluyendo hero sin cabeza
-- [x] Auditoría runtime: consola, red, GSAP/ScrollTrigger y formularios
-- [x] Auditoría SEO, accesibilidad, responsive y rendimiento
-- [ ] Corregir fallos detectados por los checks
-- [ ] Documentar resultados y guardar checkpoint auditado
+- [ ] Auditoría runtime: consola, red, GSAP/ScrollTrigger y formularios; falta una prueba de interacción real en navegador
+- [ ] Auditoría SEO, accesibilidad, responsive y rendimiento; falta revisión automatizada completa de accesibilidad
+- [x] Corregir fallos detectados por los checks: formato, fallback de mapa y división de chunks
+- [x] Documentar resultados y guardar checkpoint auditado
