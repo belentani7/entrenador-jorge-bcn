@@ -73,3 +73,16 @@
 - [x] Implementar widget flotante estilo IA con botón fijo y avatar 3D
 - [x] Añadir panel de chat responsive con apertura/cierre, mensajes rápidos y CTA de reserva
 - [x] Validar foco, teclado, móvil, animación y respuestas del widget flotante
+- [x] Inspeccionar MANUS-AI-SKILLS-ALL.zip y localizar sus SKILL.md: 253 archivos encontrados
+- [x] Extraer manualmente las skills sin usar el instalador fallido
+- [x] Verificar que las skills instaladas son legibles y utilizables: 253 nuevas, 297 disponibles, 0 errores de contenido, 0 conflictos y 0 archivos ilegibles
+- [x] Seleccionar y documentar novedades creativas de alto impacto para la landing: rail de método, sello editorial, CTA asistido y `creative-refresh.md`
+- [x] Añadir una capa visual distintiva de marca y microinteracciones premium: rail animado y barrido de luz del CTA
+- [x] Mejorar storytelling, conversión y llamada a reservar con Jorge mediante fases de método y CTA contextual enlazado a `#reserva`
+- [x] Elevar el asistente IA flotante con personalidad, avatar 3D y pregunta inicial
+- [x] Validar las novedades con 9 tests correctos, build correcto y captura desktop verificada
+- [x] Confirmar instalación global de las skills para todos los chats y proyectos
+- [x] Verificar que `/home/ubuntu/skills/` es la ubicación compartida y no hay duplicación por proyecto: 297 SKILL.md y 0 copias por proyecto
+- [ ] Corregir GitHub Pages: está sirviendo README en vez de la landing compilada
+- [ ] Verificar que el workflow publique `dist/public` en el entorno github-pages
+- [ ] Confirmar visualmente que la URL de GitHub Pages carga hero, estilos, avatar y navegación
