@@ -41,11 +41,11 @@
 - [x] Requisitos del usuario y materiales adjuntos revisados
 - [ ] Activar al final el email transaccional de confirmación al usuario y aviso por correo a Jorge mediante proveedor configurado
 - [ ] Último paso manual para Jorge: introducir RESEND_API_KEY y JORGE_EMAIL cuando decida activar los emails
-- [ ] Investigar repositorios públicos reutilizables y verificar licencia compatible
-- [ ] Cambiar el nombre de marca según la nueva indicación del usuario
-- [ ] Editar el hero para mostrar solo el cuerpo del modelo sin la cabeza
-- [ ] Verificar que GSAP/ScrollTrigger y el responsive siguen funcionando tras los cambios
-- [ ] Usar una repo pública propia del usuario como base, priorizando belentani-100
-- [ ] Cambiar el nombre de marca según la nueva indicación del usuario
-- [ ] Editar el hero para mostrar solo el cuerpo del modelo sin la cabeza
-- [ ] Verificar que GSAP/ScrollTrigger y el responsive siguen funcionando tras los cambios
+- [x] Revisar repos propias; belentani-099 no contiene licencia de terceros y se usa como repo del usuario
+- [ ] Confirmar el nuevo nombre exacto de marca si Jorge quiere sustituir “JORGE”
+- [x] Editar el hero para mostrar solo el cuerpo del modelo sin la cabeza
+- [x] Verificar que GSAP/ScrollTrigger y el responsive siguen funcionando tras los cambios
+- [x] Publicar la versión de Jorge en la rama `manus-jorge-landing` de la repo propia belentani-099
+- [ ] Confirmar el nuevo nombre exacto de marca si Jorge quiere sustituir “JORGE”
+- [x] Editar el hero para mostrar solo el cuerpo del modelo sin la cabeza
+- [x] Verificar que GSAP/ScrollTrigger y el responsive siguen funcionando tras los cambios
