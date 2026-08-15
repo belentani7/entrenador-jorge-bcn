@@ -79,7 +79,10 @@ function vitePluginManusDebugCollector(): Plugin {
     name: "manus-debug-collector",
 
     transformIndexHtml(html) {
-      if (process.env.NODE_ENV === "production") {
+      if (
+        process.env.NODE_ENV === "production" ||
+        process.env.GITHUB_ACTIONS === "true"
+      ) {
         return html;
       }
       return {
@@ -169,6 +172,7 @@ export default defineConfig({
   },
   envDir: path.resolve(import.meta.dirname),
   root: path.resolve(import.meta.dirname, "client"),
+  base: process.env.GITHUB_ACTIONS ? "/entrenador-jorge-bcn/" : "/",
   publicDir: path.resolve(import.meta.dirname, "client", "public"),
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),

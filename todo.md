@@ -20,7 +20,7 @@
 - [x] Respeto de prefers-reduced-motion y accesibilidad básica
 - [x] Responsive 100% mobile-first y verificación visual en desktop/móvil
 - [x] Tests Vitest para validación y procedimientos de captación/reserva
-- [ ] Revisión de rendimiento, errores de consola y build: build OK; falta cerrar la revisión histórica de consola
+- [x] Revisión de rendimiento, errores de consola y build: build OK; errores históricos del mapa documentados y fallback corregido
 - [ ] Checkpoint final antes de entregar
 - [ ] Implementar confirmación automática real por email al usuario tras lead/reserva
 - [ ] Sustituir galería genérica por módulo de antes/después con consentimiento visible
@@ -55,7 +55,21 @@
 - [x] Auditoría completa de TypeScript, tests, build, esquema y migraciones
 - [x] Auditoría de GitHub, rama publicada y repo propia seleccionada
 - [x] Auditoría visual desktop y móvil, incluyendo hero sin cabeza
-- [ ] Auditoría runtime: consola, red, GSAP/ScrollTrigger y formularios; falta una prueba de interacción real en navegador
+- [ ] Auditoría runtime: consola, red, GSAP/ScrollTrigger y formularios; el widget tiene tests locales y captura visual, falta interacción manual completa
 - [ ] Auditoría SEO, accesibilidad, responsive y rendimiento; falta revisión automatizada completa de accesibilidad
 - [x] Corregir fallos detectados por los checks: formato, fallback de mapa y división de chunks
 - [x] Documentar resultados y guardar checkpoint auditado
+- [x] Comparar la versión de GitHub con el proyecto local y el despliegue publicado
+- [x] Reparar la versión rota de GitHub sin perder el hero, GSAP ni los assets
+- [x] Validar build, runtime, assets, responsive y sincronización de main
+- [x] Guardar checkpoint de la reparación
+- [x] Añadir asistente fitness conversacional en español dentro de la landing
+- [x] Crear base local amplia de preguntas sobre salud general, nutrición, rutinas y mitos: expansión local superior a 1000 formulaciones
+- [x] Implementar búsqueda tolerante a errores ortográficos y respuestas de fallback
+- [x] Añadir límites de seguridad: no diagnóstico, señales de derivación y aviso general
+- [x] Añadir avatar 3D animado tipo emoji feliz con gesto de bíceps y CTA para contratar a Jorge
+- [x] Añadir tests de clasificación, typo-tolerance, seguridad y CTA del asistente: 5 tests totales correctos
+- [x] Validar responsive, rendimiento y ausencia de errores tras integrar el asistente
+- [x] Implementar widget flotante estilo IA con botón fijo y avatar 3D
+- [x] Añadir panel de chat responsive con apertura/cierre, mensajes rápidos y CTA de reserva
+- [x] Validar foco, teclado, móvil, animación y respuestas del widget flotante

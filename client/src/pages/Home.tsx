@@ -24,10 +24,12 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { trpc } from "@/lib/trpc";
+import AssistantWidget from "@/components/AssistantWidget";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const heroImage = "/manus-storage/jorge-hero-body-only_6847b003.png";
+const heroImage =
+  "https://jorgefit-zvv3n2zn.manus.space/manus-storage/jorge-hero-body-only_6847b003.png";
 const storyImage =
   "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=1200&q=85";
 const gallery = [
@@ -795,6 +797,7 @@ export default function Home() {
           </div>
         </div>
       </footer>
+      <AssistantWidget />
     </div>
   );
 }
