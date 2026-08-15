@@ -38,7 +38,8 @@ export const appRouter = router({
       const emailSent = await sendTransactionalEmail({ to: input.email, subject: "Solicitud recibida · Jorge Performance", html: confirmationEmail(input.name, input.date, input.time) });
       const ownerEmail = process.env.JORGE_EMAIL;
       const ownerEmailSent = ownerEmail ? await sendTransactionalEmail({ to: ownerEmail, subject: "Nueva reserva confirmada · Jorge Performance", html: `<p>Nueva reserva de ${input.name} para el ${input.date} a las ${input.time}. Email: ${input.email}. Teléfono: ${input.phone}.</p>` }) : false;
-      return { success: true, id: result.id, ownerNotified: notified || ownerEmailSent, emailSent } as const;
+      const ownerNotified = notified || ownerEmailSent;
+      return { success: true, id: result.id, ownerNotified, emailSent } as const;
     }),
   }),
 });

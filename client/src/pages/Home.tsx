@@ -7,7 +7,7 @@ import { trpc } from "@/lib/trpc";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const heroImage = "/manus-storage/jorge-hero_4dac8c9d.png";
+const heroImage = "/manus-storage/jorge-hero-body-only_6847b003.png";
 const storyImage = "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=1200&q=85";
 const gallery = [
   "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1000&q=85",
