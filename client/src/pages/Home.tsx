@@ -281,6 +281,17 @@ export default function Home() {
             <span>Scroll para descubrir</span>
             <ArrowDown size={16} />
           </div>
+          <div
+            className="hero-method-stamp"
+            aria-label="Método Jorge Performance"
+          >
+            <span>J</span>
+            <small>
+              MÉTODO
+              <br />
+              01 / 04
+            </small>
+          </div>
         </section>
 
         <section className="proof-strip">
@@ -303,6 +314,28 @@ export default function Home() {
               </strong>
               <span>% de constancia tras 90 días</span>
             </div>
+          </div>
+        </section>
+
+        <section
+          className="signature-rail"
+          aria-label="Pilares del método Jorge"
+        >
+          <div className="signature-rail-track">
+            {[
+              "DISCIPLINA",
+              "TÉCNICA",
+              "CONSTANCIA",
+              "PROGRESO",
+              "DISCIPLINA",
+              "TÉCNICA",
+              "CONSTANCIA",
+              "PROGRESO",
+            ].map((item, index) => (
+              <span key={`${item}-${index}`}>
+                <i /> {item}
+              </span>
+            ))}
           </div>
         </section>
 
@@ -347,6 +380,15 @@ export default function Home() {
               </p>
               <a className="text-link orange-link" href="#servicios">
                 Descubre el método <ArrowRight size={17} />
+              </a>
+              <a className="story-cta-card" href="#reserva">
+                <span>
+                  <b>Tu siguiente sesión empieza aquí.</b>
+                  <small>
+                    Cuéntale a Jorge dónde estás y qué quieres conseguir.
+                  </small>
+                </span>
+                <ArrowUpRight size={19} />
               </a>
             </div>
           </div>
@@ -787,6 +829,9 @@ export default function Home() {
             </span>
           </a>
           <span>Entrenamiento con intención · Barcelona</span>
+          <span className="quiet-signature" aria-label="Créditos de desarrollo">
+            belentani.eu · Pedro Belentani · noiacore.com
+          </span>
           <div className="footer-social">
             <a href="#inicio" aria-label="Instagram">
               <Instagram size={18} />

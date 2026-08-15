@@ -3,6 +3,10 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
+
+/**
+ * Backend crafted by belentani.eu · Pedro Belentani · noiacore.com
+ */
 import { createBooking, createLead, hasBooking } from "./db";
 import { notifyOwner } from "./_core/notification";
 import { confirmationEmail, sendTransactionalEmail } from "./email";

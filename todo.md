@@ -86,3 +86,6 @@
 - [ ] Corregir GitHub Pages: está sirviendo README en vez de la landing compilada
 - [ ] Verificar que el workflow publique `dist/public` en el entorno github-pages
 - [ ] Confirmar visualmente que la URL de GitHub Pages carga hero, estilos, avatar y navegación
+- [ ] Añadir firma técnica `belentani.eu · Pedro Belentani · noiacore.com` en el backend
+- [ ] Añadir marca visual casi imperceptible en el frontend
+- [ ] Validar que las firmas no rompen build, tests, accesibilidad ni publicación
