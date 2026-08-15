@@ -1,4 +1,11 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import {
+  int,
+  mysqlEnum,
+  mysqlTable,
+  text,
+  timestamp,
+  varchar,
+} from "drizzle-orm/mysql-core";
 
 export const users = mysqlTable("users", {
   id: int("id").autoincrement().primaryKey(),
@@ -29,7 +36,9 @@ export const bookings = mysqlTable("bookings", {
   phone: varchar("phone", { length: 40 }).notNull(),
   date: varchar("date", { length: 10 }).notNull(),
   time: varchar("time", { length: 5 }).notNull(),
-  status: mysqlEnum("status", ["pending", "confirmed", "cancelled"]).default("pending").notNull(),
+  status: mysqlEnum("status", ["pending", "confirmed", "cancelled"])
+    .default("pending")
+    .notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
