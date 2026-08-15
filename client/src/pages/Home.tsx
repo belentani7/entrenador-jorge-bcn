@@ -829,7 +829,11 @@ export default function Home() {
             </span>
           </a>
           <span>Entrenamiento con intención · Barcelona</span>
-          <span className="quiet-signature" aria-label="Créditos de desarrollo">
+          <span
+            className="quiet-signature"
+            role="note"
+            aria-label="Créditos de desarrollo"
+          >
             belentani.eu · Pedro Belentani · noiacore.com
           </span>
           <div className="footer-social">

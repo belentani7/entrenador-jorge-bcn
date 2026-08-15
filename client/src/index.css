@@ -1496,10 +1496,10 @@ small {
 }
 
 .quiet-signature {
-  color: #5f5a54;
+  color: #c1b6aa;
   font-size: 9px;
   letter-spacing: 0.04em;
-  opacity: 0.52;
+  opacity: 0.92;
   transition:
     opacity 180ms ease,
     color 180ms ease;
@@ -1515,6 +1515,6 @@ small {
     width: 100%;
     margin-top: 9px;
     font-size: 8px;
-    opacity: 0.42;
+    opacity: 0.82;
   }
 }

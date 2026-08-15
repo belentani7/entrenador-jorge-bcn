@@ -83,16 +83,16 @@
 - [x] Validar las novedades con 9 tests correctos, build correcto y captura desktop verificada
 - [x] Confirmar instalación global de las skills para todos los chats y proyectos
 - [x] Verificar que `/home/ubuntu/skills/` es la ubicación compartida y no hay duplicación por proyecto: 297 SKILL.md y 0 copias por proyecto
-- [ ] Corregir GitHub Pages: está sirviendo README en vez de la landing compilada
-- [ ] Verificar que el workflow publique `dist/public` en el entorno github-pages
-- [ ] Confirmar visualmente que la URL de GitHub Pages carga hero, estilos, avatar y navegación
+- [x] Corregir GitHub Pages: estaba sirviendo README en vez de la landing compilada
+- [x] Verificar que el workflow publique `dist/public` en el entorno github-pages
+- [x] Confirmar visualmente que la URL de GitHub Pages carga hero, estilos, avatar y navegación
 - [x] Añadir firma técnica `belentani.eu · Pedro Belentani · noiacore.com` en el backend
 - [x] Añadir marca visual casi imperceptible en el frontend
 - [x] Validar que las firmas no rompen build, tests, accesibilidad ni publicación: typecheck, 9 tests, build, captura y push remoto correctos
-- [ ] Verificar accesibilidad de la firma frontend, contraste y lectura asistiva
-- [ ] Confirmar que la firma desplegada aparece en la publicación pública tras el push
-- [ ] Corregir Pages legacy que continúa sirviendo README pese al deployment verde
-- [ ] Evaluar y aplicar fallback estático en raíz sin romper la repo fuente
-- [ ] Validar la landing real en la URL pública tras el siguiente deployment
-- [ ] Corregir 404 del router SPA bajo `/entrenador-jorge-bcn/` en GitHub Pages
-- [ ] Validar la ruta base dinámica en Manus y GitHub Pages
+- [x] Verificar accesibilidad de la firma frontend, contraste y lectura asistiva: `role=note`, `aria-label`, responsive y contraste 8.42:1 confirmado
+- [ ] Confirmar que la firma desplegada aparece también en Manus tras el checkpoint final; ya verificada en GitHub Pages
+- [x] Corregir Pages legacy que continúa sirviendo README pese al deployment verde: fallback estático en la raíz y Pages en modo workflow
+- [x] Evaluar y aplicar fallback estático en raíz sin romper la repo fuente
+- [x] Validar la landing real en la URL pública tras el siguiente deployment
+- [x] Corregir 404 del router SPA bajo `/entrenador-jorge-bcn/` en GitHub Pages
+- [x] Validar la ruta base dinámica en Manus y GitHub Pages: landing cargada en ambas URLs
