@@ -94,3 +94,5 @@
 - [ ] Corregir Pages legacy que continúa sirviendo README pese al deployment verde
 - [ ] Evaluar y aplicar fallback estático en raíz sin romper la repo fuente
 - [ ] Validar la landing real en la URL pública tras el siguiente deployment
+- [ ] Corregir 404 del router SPA bajo `/entrenador-jorge-bcn/` en GitHub Pages
+- [ ] Validar la ruta base dinámica en Manus y GitHub Pages
