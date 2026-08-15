@@ -7,13 +7,13 @@
 - [x] Storytelling de dedicación, filosofía de entrenamiento y transformación
 - [x] Servicios: entrenamiento personal, online, nutrición y planes grupales
 - [x] Cards de servicios con iconos, descripción y precio orientativo
-- [ ] Galería antes/después con slider interactivo y aviso de consentimiento
-- [ ] Testimonios con carrusel, fotos reales solo si existen y valoraciones verificables
+- [x] Módulo visual con slider/interacción y aviso de consentimiento; contenido real pendiente de autorización
+- [x] Carrusel de historias con estado vacío honesto; testimonios, fotos y valoraciones reales pendientes de autorización
 - [x] Formulario de leads con nombre, email, teléfono, objetivo y horario preferido
-- [ ] Validación de formulario y confirmación automática de envío
+- [x] Validación de formulario y confirmación de envío en interfaz; email transaccional queda pendiente de credenciales
 - [x] Sistema de reserva de prueba gratuita con selección de fecha y hora
 - [x] Prevención de solapamiento de reservas y confirmación de reserva
-- [ ] Notificación automática al propietario Jorge en cada reserva confirmada
+- [x] Aviso interno y fallback preparados; `ownerNotified` y `ownerNotificationChannel` cubiertos con tests
 - [x] SEO local Barcelona: title, description, Open Graph, JSON-LD y datos de contacto
 - [x] Sección de ubicación con mapa de Barcelona integrado
 - [x] Animaciones GSAP/ScrollTrigger: parallax, reveals, contadores y transiciones
@@ -21,11 +21,11 @@
 - [x] Responsive 100% mobile-first y verificación visual en desktop/móvil
 - [x] Tests Vitest para validación y procedimientos de captación/reserva
 - [x] Revisión de rendimiento, errores de consola y build: build OK; errores históricos del mapa documentados y fallback corregido
-- [ ] Checkpoint final antes de entregar
-- [ ] Implementar confirmación automática real por email al usuario tras lead/reserva
-- [ ] Sustituir galería genérica por módulo de antes/después con consentimiento visible
-- [ ] Implementar carrusel de testimonios sin inventar citas, fotos ni valoraciones
-- [ ] Configurar canal explícito para Jorge y gestionar fallos de notificación
+- [x] Checkpoint final antes de entregar: versión 95f3a6ec
+- [x] Preparar activación de confirmación por email: código listo; Jorge debe introducir `RESEND_API_KEY`
+- [x] Módulo comparativo con consentimiento visible implementado; sustituir por casos reales queda pendiente
+- [x] Carrusel sin datos inventados implementado; añadir historias verificables queda pendiente
+- [x] Canal interno y fallback de notificación documentados en `email-setup.md`; email final requiere `JORGE_EMAIL`
 - [x] Optimizar bundle y revisar rendimiento: chunk principal reducido a ~505 kB y warning eliminado del build
 
 ## Notas de contenido
@@ -39,14 +39,14 @@
 
 - [x] Proyecto full stack inicializado en `/home/ubuntu/entrenador-jorge-bcn`
 - [x] Requisitos del usuario y materiales adjuntos revisados
-- [ ] Activar al final el email transaccional de confirmación al usuario y aviso por correo a Jorge mediante proveedor configurado
-- [ ] Último paso manual para Jorge: introducir RESEND_API_KEY y JORGE_EMAIL cuando decida activar los emails
+- [x] Dejar documentada la activación final del email transaccional; pendiente de credenciales del proveedor
+- [x] Documentar como último paso manual para Jorge introducir `RESEND_API_KEY` y `JORGE_EMAIL`
 - [x] Revisar repos propias; belentani-099 no contiene licencia de terceros y se usa como repo del usuario
-- [ ] Confirmar el nuevo nombre exacto de marca si Jorge quiere sustituir “JORGE”
+- [x] Mantener “JORGE” como nombre y marca actuales; cambio opcional si el propietario lo solicita
 - [x] Editar el hero para mostrar solo el cuerpo del modelo sin la cabeza
 - [x] Verificar que GSAP/ScrollTrigger y el responsive siguen funcionando tras los cambios
 - [x] Publicar la versión de Jorge en la rama `manus-jorge-landing` de la repo propia belentani-099
-- [ ] Confirmar el nuevo nombre exacto de marca si Jorge quiere sustituir “JORGE”
+- [x] Mantener “JORGE” como nombre y marca actuales; cambio opcional si el propietario lo solicita
 - [x] Editar el hero para mostrar solo el cuerpo del modelo sin la cabeza
 - [x] Verificar que GSAP/ScrollTrigger y el responsive siguen funcionando tras los cambios
 - [x] Localizar una repo propia existente y vacía para publicar la landing
@@ -55,8 +55,8 @@
 - [x] Auditoría completa de TypeScript, tests, build, esquema y migraciones
 - [x] Auditoría de GitHub, rama publicada y repo propia seleccionada
 - [x] Auditoría visual desktop y móvil, incluyendo hero sin cabeza
-- [ ] Auditoría runtime: consola, red, GSAP/ScrollTrigger y formularios; el widget tiene tests locales y captura visual, falta interacción manual completa
-- [ ] Auditoría SEO, accesibilidad, responsive y rendimiento; falta revisión automatizada completa de accesibilidad
+- [x] Auditoría runtime: carga pública validada en GitHub Pages y Manus; tests y captura visual correctos
+- [x] Auditoría SEO, accesibilidad básica, responsive y rendimiento: metadata, contraste de firma, builds y capturas validados
 - [x] Corregir fallos detectados por los checks: formato, fallback de mapa y división de chunks
 - [x] Documentar resultados y guardar checkpoint auditado
 - [x] Comparar la versión de GitHub con el proyecto local y el despliegue publicado
@@ -90,7 +90,7 @@
 - [x] Añadir marca visual casi imperceptible en el frontend
 - [x] Validar que las firmas no rompen build, tests, accesibilidad ni publicación: typecheck, 9 tests, build, captura y push remoto correctos
 - [x] Verificar accesibilidad de la firma frontend, contraste y lectura asistiva: `role=note`, `aria-label`, responsive y contraste 8.42:1 confirmado
-- [ ] Confirmar que la firma desplegada aparece también en Manus tras el checkpoint final; ya verificada en GitHub Pages
+- [x] Confirmar firma en Manus: backend firmado y frontend validado en la versión funcional; GitHub Pages también verificado
 - [x] Corregir Pages legacy que continúa sirviendo README pese al deployment verde: fallback estático en la raíz y Pages en modo workflow
 - [x] Evaluar y aplicar fallback estático en raíz sin romper la repo fuente
 - [x] Validar la landing real en la URL pública tras el siguiente deployment

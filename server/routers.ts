@@ -11,6 +11,16 @@ import { createBooking, createLead, hasBooking } from "./db";
 import { notifyOwner } from "./_core/notification";
 import { confirmationEmail, sendTransactionalEmail } from "./email";
 
+export function resolveOwnerNotification(
+  internalNotified: boolean,
+  ownerEmailSent: boolean
+) {
+  return {
+    notified: internalNotified || ownerEmailSent,
+    channel: internalNotified ? "internal" : ownerEmailSent ? "email" : "none",
+  } as const;
+}
+
 const contactFields = {
   name: z.string().trim().min(2).max(120),
   email: z.string().email().max(320),
@@ -76,11 +86,15 @@ export const appRouter = router({
               html: `<p>Nueva reserva de ${input.name} para el ${input.date} a las ${input.time}. Email: ${input.email}. Teléfono: ${input.phone}.</p>`,
             })
           : false;
-        const ownerNotified = notified || ownerEmailSent;
+        const ownerNotification = resolveOwnerNotification(
+          notified,
+          ownerEmailSent
+        );
         return {
           success: true,
           id: result.id,
-          ownerNotified,
+          ownerNotified: ownerNotification.notified,
+          ownerNotificationChannel: ownerNotification.channel,
           emailSent,
         } as const;
       }),
