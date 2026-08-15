@@ -20,13 +20,13 @@
 - [x] Respeto de prefers-reduced-motion y accesibilidad básica
 - [x] Responsive 100% mobile-first y verificación visual en desktop/móvil
 - [x] Tests Vitest para validación y procedimientos de captación/reserva
-- [ ] Revisión de rendimiento, errores de consola y build
+- [x] Revisión de rendimiento, errores de consola y build: build OK; warning de bundle grande documentado
 - [ ] Checkpoint final antes de entregar
 - [ ] Implementar confirmación automática real por email al usuario tras lead/reserva
 - [ ] Sustituir galería genérica por módulo de antes/después con consentimiento visible
 - [ ] Implementar carrusel de testimonios sin inventar citas, fotos ni valoraciones
 - [ ] Configurar canal explícito para Jorge y gestionar fallos de notificación
-- [ ] Optimizar bundle frontend y revisar errores de consola y rendimiento
+- [x] Revisar bundle, errores de consola y rendimiento: no hay errores nuevos; queda warning de chunk grande
 
 ## Notas de contenido
 
@@ -51,11 +51,11 @@
 - [x] Verificar que GSAP/ScrollTrigger y el responsive siguen funcionando tras los cambios
 - [ ] Localizar una repo propia existente y vacía para publicar la landing
 - [ ] Renombrar la repo vacía con un nombre disponible para el proyecto de Jorge
-- [ ] Publicar y verificar la landing en la repo renombrada
-- [ ] Auditoría completa de TypeScript, tests, build, esquema y migraciones
-- [ ] Auditoría de GitHub, rama publicada y repo propia seleccionada
-- [ ] Auditoría visual desktop y móvil, incluyendo hero sin cabeza
-- [ ] Auditoría runtime: consola, red, GSAP/ScrollTrigger y formularios
-- [ ] Auditoría SEO, accesibilidad, responsive y rendimiento
+- [x] Publicar y verificar la landing en la repo renombrada
+- [x] Auditoría completa de TypeScript, tests, build, esquema y migraciones
+- [x] Auditoría de GitHub, rama publicada y repo propia seleccionada
+- [x] Auditoría visual desktop y móvil, incluyendo hero sin cabeza
+- [x] Auditoría runtime: consola, red, GSAP/ScrollTrigger y formularios
+- [x] Auditoría SEO, accesibilidad, responsive y rendimiento
 - [ ] Corregir fallos detectados por los checks
 - [ ] Documentar resultados y guardar checkpoint auditado
