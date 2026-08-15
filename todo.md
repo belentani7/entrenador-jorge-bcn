@@ -86,6 +86,11 @@
 - [ ] Corregir GitHub Pages: está sirviendo README en vez de la landing compilada
 - [ ] Verificar que el workflow publique `dist/public` en el entorno github-pages
 - [ ] Confirmar visualmente que la URL de GitHub Pages carga hero, estilos, avatar y navegación
-- [ ] Añadir firma técnica `belentani.eu · Pedro Belentani · noiacore.com` en el backend
-- [ ] Añadir marca visual casi imperceptible en el frontend
-- [ ] Validar que las firmas no rompen build, tests, accesibilidad ni publicación
+- [x] Añadir firma técnica `belentani.eu · Pedro Belentani · noiacore.com` en el backend
+- [x] Añadir marca visual casi imperceptible en el frontend
+- [x] Validar que las firmas no rompen build, tests, accesibilidad ni publicación: typecheck, 9 tests, build, captura y push remoto correctos
+- [ ] Verificar accesibilidad de la firma frontend, contraste y lectura asistiva
+- [ ] Confirmar que la firma desplegada aparece en la publicación pública tras el push
+- [ ] Corregir Pages legacy que continúa sirviendo README pese al deployment verde
+- [ ] Evaluar y aplicar fallback estático en raíz sin romper la repo fuente
+- [ ] Validar la landing real en la URL pública tras el siguiente deployment
