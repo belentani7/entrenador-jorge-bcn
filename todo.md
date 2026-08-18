@@ -122,3 +122,14 @@
 - [x] Añadir una prueba automatizada para la inicialización requerida de base de datos sin insertar datos
 - [x] Añadir una prueba de contrato para la respuesta tRPC de formularios o verificar el flujo en preview
 - [x] Desplegar la corrección del provider/transporte directo y verificar públicamente que Lead y Booking salen de «Enviando…»
+
+## Orden de ejecución: limpieza y elevación final
+
+- [x] Auditar archivos del proyecto y clasificar producto, configuración, tests y documentación
+- [x] Eliminar apuntes, snapshots y documentación redundante del proyecto sin borrar documentación operativa útil
+- [x] Consolidar la documentación final en pocos archivos mantenibles y corregir el historial de todo para que no sea ruido de ejecución
+- [x] Revisar y mejorar calidad integral de frontend, backend, accesibilidad, responsive, SEO, rendimiento y seguridad
+- [x] Revisar y reforzar tests y comandos de calidad sin inventar datos de clientes
+- [x] Ejecutar validación final local y pública con evidencia
+- [ ] Sincronizar la versión limpia en GitHub y comprobar Actions/Pages
+- [ ] Guardar checkpoint final publicado y entregar el resultado
