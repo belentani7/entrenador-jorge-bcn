@@ -131,5 +131,5 @@
 - [x] Revisar y mejorar calidad integral de frontend, backend, accesibilidad, responsive, SEO, rendimiento y seguridad
 - [x] Revisar y reforzar tests y comandos de calidad sin inventar datos de clientes
 - [x] Ejecutar validación final local y pública con evidencia
-- [ ] Sincronizar la versión limpia en GitHub y comprobar Actions/Pages
-- [ ] Guardar checkpoint final publicado y entregar el resultado
+- [x] Sincronizar la versión limpia en GitHub y comprobar Actions/Pages: commit 767211f, workflow 32144365796 correcto
+- [x] Guardar checkpoint final publicado y entregar el resultado
