@@ -27,6 +27,14 @@ const contactFields = {
   phone: z.string().trim().min(7).max(40),
 };
 
+const bookingTimes = ["07:00", "09:00", "13:30", "18:00", "19:30"] as const;
+const bookingDate = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/)
+  .refine(value => value >= new Date().toISOString().slice(0, 10), {
+    message: "La fecha debe ser hoy o posterior.",
+  });
+
 export const appRouter = router({
   system: systemRouter,
   auth: router({
@@ -61,8 +69,8 @@ export const appRouter = router({
       .input(
         z.object({
           ...contactFields,
-          date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-          time: z.string().regex(/^\d{2}:\d{2}$/),
+          date: bookingDate,
+          time: z.enum(bookingTimes),
         })
       )
       .mutation(async ({ input }) => {

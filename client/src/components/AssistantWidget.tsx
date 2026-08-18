@@ -64,6 +64,8 @@ export default function AssistantWidget() {
       {open && (
         <section
           className="assistant-panel"
+          role="dialog"
+          aria-modal="false"
           aria-label="Asistente fitness de Jorge"
         >
           <header className="assistant-header">
@@ -74,7 +76,7 @@ export default function AssistantWidget() {
                   alt="Asistente fitness de Jorge"
                   className="assistant-avatar"
                 />
-                <span className="assistant-online" />
+                <span className="assistant-online" aria-hidden="true" />
               </div>
               <div>
                 <strong>Jorge IA</strong>
@@ -134,6 +136,8 @@ export default function AssistantWidget() {
               ref={inputRef}
               value={input}
               onChange={event => setInput(event.target.value)}
+              required
+              maxLength={500}
               placeholder="Escribe tu pregunta…"
               aria-label="Escribe tu pregunta al asistente"
             />

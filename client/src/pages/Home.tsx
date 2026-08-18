@@ -38,6 +38,14 @@ const gallery = [
   "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=1000&q=85",
 ];
 
+const minBookingDate = new Date(
+  Date.now() - new Date().getTimezoneOffset() * 60_000
+)
+  .toISOString()
+  .slice(0, 10);
+
+type BookingTime = "07:00" | "09:00" | "13:30" | "18:00" | "19:30";
+
 const services = [
   {
     icon: Dumbbell,
@@ -84,7 +92,7 @@ export default function Home() {
     email: "",
     phone: "",
     date: "",
-    time: "",
+    time: "" as "" | BookingTime,
   });
   const leadMutation = trpc.leads.create.useMutation();
   const bookingMutation = trpc.bookings.create.useMutation();
@@ -171,10 +179,16 @@ export default function Home() {
       !booking.time
     )
       return toast.error("Elige una fecha y una hora para reservar.");
-    bookingMutation.mutate(booking, {
-      onSuccess: () => {
+    const bookingPayload = {
+      ...booking,
+      time: booking.time as BookingTime,
+    };
+    bookingMutation.mutate(bookingPayload, {
+      onSuccess: result => {
         toast.success(
-          "Solicitud recibida. Jorge ha sido notificado y confirmará tu sesión."
+          result.ownerNotified
+            ? "Solicitud recibida. Jorge ha sido notificado y confirmará tu sesión."
+            : "Solicitud recibida. Jorge revisará tu petición y confirmará tu sesión."
         );
         setBooking({ name: "", email: "", phone: "", date: "", time: "" });
       },
@@ -297,22 +311,22 @@ export default function Home() {
         <section className="proof-strip">
           <div className="container proof-grid">
             <div>
-              <strong className="stat-number" data-value="320">
+              <strong className="stat-number" data-value="1">
                 0
               </strong>
-              <span>personas acompañadas</span>
+              <span>método personalizado</span>
             </div>
             <div>
-              <strong className="stat-number" data-value="8">
+              <strong className="stat-number" data-value="4">
                 0
               </strong>
-              <span>años creando hábitos</span>
+              <span>fases de progreso</span>
             </div>
             <div>
-              <strong className="stat-number" data-value="94">
+              <strong className="stat-number" data-value="0">
                 0
               </strong>
-              <span>% de constancia tras 90 días</span>
+              <span>promesas vacías</span>
             </div>
           </div>
         </section>
@@ -574,6 +588,7 @@ export default function Home() {
               <label>
                 Nombre
                 <input
+                  required
                   value={booking.name}
                   onChange={e =>
                     setBooking({ ...booking, name: e.target.value })
@@ -584,6 +599,7 @@ export default function Home() {
               <label>
                 Email
                 <input
+                  required
                   type="email"
                   value={booking.email}
                   onChange={e =>
@@ -596,6 +612,8 @@ export default function Home() {
                 <label>
                   Fecha
                   <input
+                    required
+                    min={minBookingDate}
                     type="date"
                     value={booking.date}
                     onChange={e =>
@@ -606,23 +624,28 @@ export default function Home() {
                 <label>
                   Hora
                   <select
+                    required
                     value={booking.time}
                     onChange={e =>
-                      setBooking({ ...booking, time: e.target.value })
+                      setBooking({
+                        ...booking,
+                        time: e.target.value as "" | BookingTime,
+                      })
                     }
                   >
                     <option value="">Selecciona</option>
-                    <option>07:00</option>
-                    <option>09:00</option>
-                    <option>13:30</option>
-                    <option>18:00</option>
-                    <option>19:30</option>
+                    <option value="07:00">07:00</option>
+                    <option value="09:00">09:00</option>
+                    <option value="13:30">13:30</option>
+                    <option value="18:00">18:00</option>
+                    <option value="19:30">19:30</option>
                   </select>
                 </label>
               </div>
               <label>
                 Teléfono
                 <input
+                  required
                   value={booking.phone}
                   onChange={e =>
                     setBooking({ ...booking, phone: e.target.value })
@@ -669,6 +692,7 @@ export default function Home() {
               <label>
                 Nombre
                 <input
+                  required
                   value={lead.name}
                   onChange={e => setLead({ ...lead, name: e.target.value })}
                   placeholder="Tu nombre"
@@ -677,6 +701,7 @@ export default function Home() {
               <label>
                 Email
                 <input
+                  required
                   type="email"
                   value={lead.email}
                   onChange={e => setLead({ ...lead, email: e.target.value })}
@@ -687,6 +712,7 @@ export default function Home() {
                 <label>
                   Teléfono
                   <input
+                    required
                     value={lead.phone}
                     onChange={e => setLead({ ...lead, phone: e.target.value })}
                     placeholder="+34…"
@@ -695,6 +721,7 @@ export default function Home() {
                 <label>
                   ¿Qué buscas?
                   <input
+                    required
                     value={lead.goal}
                     onChange={e => setLead({ ...lead, goal: e.target.value })}
                     placeholder="Ganar fuerza"
@@ -704,6 +731,7 @@ export default function Home() {
               <label>
                 Horario preferido
                 <select
+                  required
                   value={lead.preferredTime}
                   onChange={e =>
                     setLead({ ...lead, preferredTime: e.target.value })

@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { confirmationEmail, sendTransactionalEmail } from "./email";
 import { resolveOwnerNotification } from "./routers";
 
@@ -34,9 +34,32 @@ describe("transactional email fallback", () => {
     });
   });
 
-  it("builds a Spanish confirmation message", () => {
-    expect(confirmationEmail("Jorge", "2026-08-20", "18:00")).toContain(
-      "He recibido tus datos"
-    );
+  it("builds a Spanish confirmation message without interpolating HTML", () => {
+    const html = confirmationEmail("<Jorge>", "2026-08-20", "18:00");
+    expect(html).toContain("&lt;Jorge&gt;");
+    expect(html).not.toContain("<p>Hola <Jorge>");
+    expect(html).toContain("He recibido tus datos");
+  });
+
+  it("returns false instead of throwing when the provider network fails", async () => {
+    const previousKey = process.env.RESEND_API_KEY;
+    process.env.RESEND_API_KEY = "test-key";
+    const fetchSpy = vi
+      .spyOn(globalThis, "fetch")
+      .mockRejectedValueOnce(new Error("offline"));
+    const warningSpy = vi
+      .spyOn(console, "warn")
+      .mockImplementation(() => undefined);
+    await expect(
+      sendTransactionalEmail({
+        to: "test@example.com",
+        subject: "Test",
+        html: "<p>Test</p>",
+      })
+    ).resolves.toBe(false);
+    fetchSpy.mockRestore();
+    warningSpy.mockRestore();
+    if (previousKey) process.env.RESEND_API_KEY = previousKey;
+    else delete process.env.RESEND_API_KEY;
   });
 });

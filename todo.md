@@ -96,3 +96,29 @@
 - [x] Validar la landing real en la URL pública tras el siguiente deployment
 - [x] Corregir 404 del router SPA bajo `/entrenador-jorge-bcn/` en GitHub Pages
 - [x] Validar la ruta base dinámica en Manus y GitHub Pages: landing cargada en ambas URLs
+- [x] Inventariar archivos ejecutables y configuraciones para auditoría exhaustiva
+- [x] Revisar frontend de forma focalizada: React, routing, GSAP, formularios, asistente y accesibilidad
+- [x] Revisar backend de forma focalizada: tRPC, validaciones, errores, notificaciones y seguridad
+- [x] Revisar base de datos, migraciones, dependencias, Vite, GitHub Pages y secretos
+- [x] Reforzar tests para cada hallazgo reproducible
+- [x] Ejecutar checks locales, públicos y visuales con evidencia renovada
+- [x] Documentar hallazgos, correcciones y pendientes reales
+
+- [x] Corregir inicialización perezosa de base de datos antes de crear leads o reservas
+- [x] Hacer que los fallos de red del proveedor de email sean fallback no bloqueante
+- [x] Escapar nombre, fecha y hora antes de interpolarlos en emails HTML
+- [x] Añadir tests de fallback de red y escape HTML: 13 tests correctos
+- [ ] Verificación manual final de estados de éxito de Lead y Booking en la interfaz
+- [ ] Confirmar firma discreta y accesible en el último despliegue Manus
+- [ ] Guardar checkpoint final y entregar informe de auditoría
+- [ ] Recibir credenciales Resend y materiales reales autorizados de Jorge
+- [x] Corregir mutaciones frontend que quedan en «Enviando…» aunque tRPC devuelve 200 en producción
+
+## Correcciones de alcance de auditoría
+
+- [x] Crear inventario explícito de archivos ejecutables, flujos y configuraciones auditadas
+- [x] Documentar el alcance real de la revisión frontend y backend sin afirmar cobertura no demostrada; límites añadidos en `audit-inventory.md`
+- [x] Revisar y documentar migraciones y manejo de secretos con evidencia verificable
+- [x] Añadir una prueba automatizada para la inicialización requerida de base de datos sin insertar datos
+- [x] Añadir una prueba de contrato para la respuesta tRPC de formularios o verificar el flujo en preview
+- [ ] Desplegar la corrección del provider y verificar públicamente que Lead y Booking salen de «Enviando…»
