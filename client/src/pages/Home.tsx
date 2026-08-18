@@ -23,7 +23,6 @@ import {
   Zap,
 } from "lucide-react";
 import { toast } from "sonner";
-import { trpc } from "@/lib/trpc";
 import AssistantWidget from "@/components/AssistantWidget";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -45,6 +44,32 @@ const minBookingDate = new Date(
   .slice(0, 10);
 
 type BookingTime = "07:00" | "09:00" | "13:30" | "18:00" | "19:30";
+
+type PublicProcedureResponse<T> = {
+  result?: { data?: { json?: T; error?: { message?: string } } };
+  error?: { message?: string };
+};
+
+async function postPublicProcedure<T>(
+  path: string,
+  input: unknown
+): Promise<T> {
+  const response = await fetch(`/api/trpc/${path}?batch=1`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ 0: { json: input } }),
+  });
+  const payload = (await response.json()) as PublicProcedureResponse<T>[];
+  const first = payload[0];
+  const data = first?.result?.data?.json;
+  const message =
+    first?.error?.message ??
+    first?.result?.data?.error?.message ??
+    "No se pudo completar la solicitud.";
+  if (!response.ok || data === undefined) throw new Error(message);
+  return data;
+}
 
 const services = [
   {
@@ -80,6 +105,8 @@ export default function Home() {
   const [testimonialIndex, setTestimonialIndex] = useState(0);
   const [comparison, setComparison] = useState(58);
   const [mediaConsent, setMediaConsent] = useState(false);
+  const [leadSubmitting, setLeadSubmitting] = useState(false);
+  const [bookingSubmitting, setBookingSubmitting] = useState(false);
   const [lead, setLead] = useState({
     name: "",
     email: "",
@@ -94,8 +121,6 @@ export default function Home() {
     date: "",
     time: "" as "" | BookingTime,
   });
-  const leadMutation = trpc.leads.create.useMutation();
-  const bookingMutation = trpc.bookings.create.useMutation();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -151,8 +176,9 @@ export default function Home() {
       return toast.error(
         "Completa todos los campos para que Jorge pueda contactarte."
       );
-    leadMutation.mutate(lead, {
-      onSuccess: () => {
+    setLeadSubmitting(true);
+    void postPublicProcedure("leads.create", lead)
+      .then(() => {
         toast.success(
           "Gracias. Jorge recibirá tus datos y te escribirá muy pronto."
         );
@@ -163,10 +189,15 @@ export default function Home() {
           goal: "",
           preferredTime: "",
         });
-      },
-      onError: () =>
-        toast.error("No se pudo enviar el formulario. Inténtalo de nuevo."),
-    });
+      })
+      .catch(error =>
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : "No se pudo enviar el formulario. Inténtalo de nuevo."
+        )
+      )
+      .finally(() => setLeadSubmitting(false));
   };
 
   const submitBooking = (event: React.FormEvent) => {
@@ -183,18 +214,27 @@ export default function Home() {
       ...booking,
       time: booking.time as BookingTime,
     };
-    bookingMutation.mutate(bookingPayload, {
-      onSuccess: result => {
+    setBookingSubmitting(true);
+    void postPublicProcedure<{
+      success: true;
+      ownerNotified: boolean;
+    }>("bookings.create", bookingPayload)
+      .then(result => {
         toast.success(
           result.ownerNotified
             ? "Solicitud recibida. Jorge ha sido notificado y confirmará tu sesión."
             : "Solicitud recibida. Jorge revisará tu petición y confirmará tu sesión."
         );
         setBooking({ name: "", email: "", phone: "", date: "", time: "" });
-      },
-      onError: error =>
-        toast.error(error.message || "Ese horario no está disponible."),
-    });
+      })
+      .catch(error =>
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : "Ese horario no está disponible."
+        )
+      )
+      .finally(() => setBookingSubmitting(false));
   };
 
   return (
@@ -656,11 +696,9 @@ export default function Home() {
               <button
                 className="button button-primary full-button"
                 type="submit"
-                disabled={bookingMutation.isPending}
+                disabled={bookingSubmitting}
               >
-                {bookingMutation.isPending
-                  ? "Enviando…"
-                  : "Solicitar mi sesión"}
+                {bookingSubmitting ? "Enviando…" : "Solicitar mi sesión"}
                 <ArrowRight size={18} />
               </button>
               <small>
@@ -747,11 +785,9 @@ export default function Home() {
               <button
                 className="button button-outline full-button"
                 type="submit"
-                disabled={leadMutation.isPending}
+                disabled={leadSubmitting}
               >
-                {leadMutation.isPending
-                  ? "Enviando…"
-                  : "Quiero hablar con Jorge"}
+                {leadSubmitting ? "Enviando…" : "Quiero hablar con Jorge"}
                 <ArrowRight size={18} />
               </button>
             </form>
