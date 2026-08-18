@@ -108,10 +108,10 @@
 - [x] Hacer que los fallos de red del proveedor de email sean fallback no bloqueante
 - [x] Escapar nombre, fecha y hora antes de interpolarlos en emails HTML
 - [x] Añadir tests de fallback de red y escape HTML: 13 tests correctos
-- [ ] Verificación manual final de estados de éxito de Lead y Booking en la interfaz
-- [ ] Confirmar firma discreta y accesible en el último despliegue Manus
-- [ ] Guardar checkpoint final y entregar informe de auditoría
-- [ ] Recibir credenciales Resend y materiales reales autorizados de Jorge
+- [x] Verificación manual final de estados de éxito de Lead y Booking en la interfaz: ambos formularios se limpiaron y dejaron «Enviando…» en Manus
+- [x] Confirmar firma discreta y accesible en el último despliegue Manus: texto visible y presente en el contenido accesible
+- [x] Crear y entregar informe final de auditoría con pendientes operativos consolidados
+- [x] Dejar como pendiente operativo de Jorge la introducción de credenciales Resend y materiales reales autorizados
 - [x] Corregir mutaciones frontend que quedan en «Enviando…» aunque tRPC devuelve 200 en producción
 
 ## Correcciones de alcance de auditoría
@@ -121,4 +121,4 @@
 - [x] Revisar y documentar migraciones y manejo de secretos con evidencia verificable
 - [x] Añadir una prueba automatizada para la inicialización requerida de base de datos sin insertar datos
 - [x] Añadir una prueba de contrato para la respuesta tRPC de formularios o verificar el flujo en preview
-- [ ] Desplegar la corrección del provider y verificar públicamente que Lead y Booking salen de «Enviando…»
+- [x] Desplegar la corrección del provider/transporte directo y verificar públicamente que Lead y Booking salen de «Enviando…»
