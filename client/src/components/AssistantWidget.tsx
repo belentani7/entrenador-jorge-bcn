@@ -11,6 +11,11 @@ import {
   answerFitnessQuestion,
   type AssistantAnswer,
 } from "@/lib/fitnessAssistant";
+import {
+  advanceResolution,
+  RESOLUTION_POLICY,
+  type ResolutionState,
+} from "@/lib/resolutionPolicy";
 
 const avatarUrl =
   "https://jorgefit-zvv3n2zn.manus.space/manus-storage/jorge-ai-mascot_736cc655.png";
@@ -32,6 +37,11 @@ export default function AssistantWidget() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [messageId, setMessageId] = useState(1);
+  const [resolutionState, setResolutionState] = useState<ResolutionState>({
+    turn: 0,
+    closed: false,
+    handoff: false,
+  });
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 0,
@@ -49,11 +59,27 @@ export default function AssistantWidget() {
     const cleanValue = value.trim();
     if (!cleanValue) return;
     const answer = answerFitnessQuestion(cleanValue);
+    const nextResolution = advanceResolution(resolutionState, answer.topic);
+    setResolutionState(nextResolution);
+    const resolvedAnswer =
+      nextResolution.handoff && answer.resolution
+        ? {
+            ...answer,
+            title: "Objetivo listo para el siguiente paso",
+            answer: `${answer.resolution.closure} Si quieres profundizar, deja tu objetivo para que Jorge continúe contigo.`,
+            cta: "Hablar con Jorge",
+          }
+        : answer;
     const nextId = messageId + 1;
     setMessages(current => [
       ...current,
       { id: messageId, role: "user", text: cleanValue },
-      { id: nextId, role: "assistant", text: answer.answer, answer },
+      {
+        id: nextId,
+        role: "assistant",
+        text: resolvedAnswer.answer,
+        answer: resolvedAnswer,
+      },
     ]);
     setMessageId(nextId + 1);
     setInput("");
@@ -103,6 +129,31 @@ export default function AssistantWidget() {
                 {message.role === "assistant" && <Bot size={15} />}
                 <div>
                   <p>{message.text}</p>
+                  {message.answer?.resolution && (
+                    <div
+                      className="assistant-resolution"
+                      aria-label="Plan resolutivo"
+                    >
+                      <strong>Plan resolutivo</strong>
+                      <span>{message.answer.resolution.objective}</span>
+                      <ol>
+                        {message.answer.resolution.steps
+                          .slice(0, RESOLUTION_POLICY.maxStepsPerAnswer)
+                          .map(step => (
+                            <li key={step}>{step}</li>
+                          ))}
+                      </ol>
+                      <span>
+                        <b>Siguiente paso:</b>{" "}
+                        {message.answer.resolution.nextAction}
+                      </span>
+                      <small>{message.answer.resolution.closure}</small>
+                      <small>
+                        Éxito cuando:{" "}
+                        {message.answer.resolution.successCriteria}
+                      </small>
+                    </div>
+                  )}
                   {message.answer?.cta && (
                     <a
                       href="#reserva"
@@ -146,7 +197,9 @@ export default function AssistantWidget() {
             </button>
           </form>
           <p className="assistant-disclaimer">
-            Orientación general, no diagnóstico médico.
+            Orientación general, no diagnóstico médico. Objetivo{" "}
+            {resolutionState.turn}/{RESOLUTION_POLICY.maxTurnsPerObjective}; se
+            cierra o escala cuando corresponde.
           </p>
         </section>
       )}

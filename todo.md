@@ -133,3 +133,10 @@
 - [x] Ejecutar validación final local y pública con evidencia
 - [x] Sincronizar la versión limpia en GitHub y comprobar Actions/Pages: commit 767211f, workflow 32144365796 correcto
 - [x] Guardar checkpoint final publicado y entregar el resultado
+
+## Política resolutiva permanente
+
+- [x] Definir un prompt interno de resolución con objetivo, criterios de éxito, validaciones, límites y cierre
+- [x] Integrar la política en el asistente IA sin prometer persistencia infinita ni sustituir criterio médico
+- [x] Añadir tests de cierre, límites, seguridad y escalado a una persona
+- [x] Validar la mejora: 17 tests, TypeScript, build, Prettier, preview visual y DOM accesible del plan resolutivo

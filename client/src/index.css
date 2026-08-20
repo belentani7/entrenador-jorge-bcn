@@ -1207,6 +1207,36 @@ small {
   background: #ff5b1a;
   color: #0b0b0b;
 }
+.assistant-resolution {
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 9px 10px;
+  border-left: 2px solid #ff5b1a;
+  background: rgba(255, 91, 26, 0.08);
+  color: #c9c1b8;
+  font-size: 10px;
+  line-height: 1.45;
+}
+.assistant-resolution strong {
+  color: #ff9a73;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.assistant-resolution ol {
+  display: grid;
+  gap: 3px;
+  margin: 0;
+  padding-left: 18px;
+}
+.assistant-resolution b {
+  color: #f1ece5;
+}
+.assistant-resolution small {
+  color: #8d857d;
+  font-size: 9px;
+}
 .assistant-cta {
   display: inline-flex;
   align-items: center;

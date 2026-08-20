@@ -7,11 +7,14 @@ export type AssistantTopic =
   | "reserva"
   | "seguridad";
 
+import { resolutionPlanFor, type ResolutionPlan } from "./resolutionPolicy";
+
 export type AssistantAnswer = {
   topic: AssistantTopic;
   title: string;
   answer: string;
   cta?: string;
+  resolution?: ResolutionPlan;
 };
 
 type KnowledgeSeed = AssistantAnswer & { keywords: string[] };
@@ -256,6 +259,7 @@ export function answerFitnessQuestion(question: string): AssistantAnswer {
       answer:
         "Pregúntame por nutrición, rutinas, salud general, mitos del gimnasio o cómo empezar con Jorge.",
       cta: "Hablar con Jorge",
+      resolution: resolutionPlanFor("rutina"),
     };
   }
 
@@ -269,6 +273,7 @@ export function answerFitnessQuestion(question: string): AssistantAnswer {
       title: "Necesitas ayuda inmediata",
       answer:
         "Si estás en peligro o tienes una emergencia, llama al 112 o contacta ahora con los servicios de emergencia de tu zona. No puedo atender una crisis ni sustituir ayuda profesional inmediata.",
+      resolution: resolutionPlanFor("seguridad"),
     };
   }
 
@@ -283,10 +288,14 @@ export function answerFitnessQuestion(question: string): AssistantAnswer {
       answer:
         "Puedo orientarte sobre salud general, nutrición, organización de rutinas, mitos del gimnasio y el método de Jorge. Reformula la pregunta con alguna de esas palabras o deja tus datos para que Jorge te responda personalmente.",
       cta: "Dejar mi objetivo",
+      resolution: resolutionPlanFor("jorge"),
     };
   }
 
-  return { ...best.seed };
+  return {
+    ...best.seed,
+    resolution: resolutionPlanFor(best.seed.topic),
+  };
 }
 
 export { typoVariants };
