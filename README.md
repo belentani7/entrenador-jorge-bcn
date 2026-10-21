@@ -61,3 +61,10 @@ Los textos, fotografías de clientes, historias, valoraciones y resultados deben
 ## Firma técnica
 
 La firma discreta del proyecto es `belentani.eu · Pedro Belentani · noiacore.com` y aparece en el frontend y en la identificación técnica del servidor.
+
+
+## Horario real y garantías de reservas (octubre de 2026)
+
+Los formularios se verifican en `Europe/Madrid` con fechas de calendario reales, teniendo en cuenta los cambios de horario de invierno/verano. No se permiten franjas de hoy que ya han pasado en Barcelona. Las plantillas HTML de notificación al entrenador escapan los datos introducidos por el visitante. La CI de Pages ahora exige el chequeo de tipos y los tests antes de publicar la página estática.
+
+**Límite conocido y bloqueo de producción:** el modelo actual verifica `hasBooking` y crea una reserva en dos consultas independientes. Esa combinación no es transaccional; con peticiones simultáneas aún podría duplicar la misma franja. Se necesita una restricción única de slots activos respaldada por una migración y un test MySQL concurrente antes de publicitar reserva automática garantizada. Hasta entonces, las reservas deben revisarse en el backend operativo. GitHub Pages no almacena leads por sí solo.
