@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { confirmationEmail, sendTransactionalEmail } from "./email";
+import { confirmationEmail, sendTransactionalEmail, escapeHtml } from "./email";
 import { resolveOwnerNotification } from "./routers";
 
 describe("transactional email fallback", () => {
@@ -39,6 +39,12 @@ describe("transactional email fallback", () => {
     expect(html).toContain("&lt;Jorge&gt;");
     expect(html).not.toContain("<p>Hola <Jorge>");
     expect(html).toContain("He recibido tus datos");
+  });
+
+  it("escapes customer-supplied markup in notifications", () => {
+    expect(escapeHtml('<img src=x onerror=alert(1)>'))
+      .toBe('&lt;img src=x onerror=alert(1)&gt;');
+    expect(escapeHtml('A&B')).toBe('A&amp;B');
   });
 
   it("returns false instead of throwing when the provider network fails", async () => {
