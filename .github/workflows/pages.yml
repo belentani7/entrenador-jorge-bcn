@@ -29,6 +29,10 @@ jobs:
           cache: pnpm
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: TypeScript gate
+        run: pnpm check
+      - name: Backend and booking regression suite
+        run: pnpm test
       - name: Build static frontend
         run: pnpm exec vite build
         env:
