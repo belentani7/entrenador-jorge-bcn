@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import AssistantWidget from "@/components/AssistantWidget";
+import { postPublicProcedure, publicFormsAvailable } from "@/lib/publicBookingApi";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -44,32 +45,6 @@ const minBookingDate = new Date(
   .slice(0, 10);
 
 type BookingTime = "07:00" | "09:00" | "13:30" | "18:00" | "19:30";
-
-type PublicProcedureResponse<T> = {
-  result?: { data?: { json?: T; error?: { message?: string } } };
-  error?: { message?: string };
-};
-
-async function postPublicProcedure<T>(
-  path: string,
-  input: unknown
-): Promise<T> {
-  const response = await fetch(`/api/trpc/${path}?batch=1`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify({ 0: { json: input } }),
-  });
-  const payload = (await response.json()) as PublicProcedureResponse<T>[];
-  const first = payload[0];
-  const data = first?.result?.data?.json;
-  const message =
-    first?.error?.message ??
-    first?.result?.data?.error?.message ??
-    "No se pudo completar la solicitud.";
-  if (!response.ok || data === undefined) throw new Error(message);
-  return data;
-}
 
 const services = [
   {
@@ -100,6 +75,7 @@ const services = [
 
 export default function Home() {
   const root = useRef<HTMLDivElement>(null);
+  const formsAvailable = publicFormsAvailable();
   const [menuOpen, setMenuOpen] = useState(false);
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [testimonialIndex, setTestimonialIndex] = useState(0);
@@ -618,6 +594,11 @@ export default function Home() {
               </div>
             </div>
             <form className="booking-form reveal" onSubmit={submitBooking}>
+              {!formsAvailable && (
+                <p role="status" className="form-unavailable">
+                  Las reservas online están desactivadas hasta verificar la conexión con el servidor.
+                </p>
+              )}
               <div className="form-title">
                 <CalendarDays />
                 <div>
@@ -696,7 +677,7 @@ export default function Home() {
               <button
                 className="button button-primary full-button"
                 type="submit"
-                disabled={bookingSubmitting}
+                disabled={bookingSubmitting || !formsAvailable}
               >
                 {bookingSubmitting ? "Enviando…" : "Solicitar mi sesión"}
                 <ArrowRight size={18} />
@@ -727,6 +708,11 @@ export default function Home() {
               </div>
             </div>
             <form className="lead-form reveal" onSubmit={submitLead}>
+              {!formsAvailable && (
+                <p role="status" className="form-unavailable">
+                  El formulario de contacto no está disponible hasta verificar el servidor.
+                </p>
+              )}
               <label>
                 Nombre
                 <input
@@ -785,7 +771,7 @@ export default function Home() {
               <button
                 className="button button-outline full-button"
                 type="submit"
-                disabled={leadSubmitting}
+                disabled={leadSubmitting || !formsAvailable}
               >
                 {leadSubmitting ? "Enviando…" : "Quiero hablar con Jorge"}
                 <ArrowRight size={18} />
