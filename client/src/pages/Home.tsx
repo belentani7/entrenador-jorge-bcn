@@ -25,6 +25,7 @@ import {
 import { toast } from "sonner";
 import AssistantWidget from "@/components/AssistantWidget";
 import { postPublicProcedure, publicFormsAvailable } from "@/lib/publicBookingApi";
+import { barcelonaCalendarDate } from "@/lib/barcelonaDate";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -37,12 +38,6 @@ const gallery = [
   "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1000&q=85",
   "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=1000&q=85",
 ];
-
-const minBookingDate = new Date(
-  Date.now() - new Date().getTimezoneOffset() * 60_000
-)
-  .toISOString()
-  .slice(0, 10);
 
 type BookingTime = "07:00" | "09:00" | "13:30" | "18:00" | "19:30";
 
@@ -76,6 +71,7 @@ const services = [
 export default function Home() {
   const root = useRef<HTMLDivElement>(null);
   const formsAvailable = publicFormsAvailable();
+  const [minBookingDate, setMinBookingDate] = useState(barcelonaCalendarDate);
   const [menuOpen, setMenuOpen] = useState(false);
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [testimonialIndex, setTestimonialIndex] = useState(0);
@@ -97,6 +93,19 @@ export default function Home() {
     date: "",
     time: "" as "" | BookingTime,
   });
+
+  // Re-evaluate the minimum date after midnight in Barcelona, even in a long-lived tab.
+  useEffect(() => {
+    const refreshDate = () => setMinBookingDate(barcelonaCalendarDate());
+    const timer = window.setInterval(refreshDate, 60_000);
+    window.addEventListener("focus", refreshDate);
+    document.addEventListener("visibilitychange", refreshDate);
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener("focus", refreshDate);
+      document.removeEventListener("visibilitychange", refreshDate);
+    };
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
