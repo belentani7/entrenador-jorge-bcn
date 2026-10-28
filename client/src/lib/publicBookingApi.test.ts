@@ -51,4 +51,29 @@ describe("static booking transport", () => {
     await expect(postPublicProcedure("leads.create", {}, config, request))
       .rejects.toThrow("respuesta válida");
   });
+
+  it.each(["leads.create", "bookings.create"] as const)(
+    "never confirms %s when HTTP 200 lacks explicit boolean success",
+    async procedure => {
+      const config = { pageOrigin: "https://studio.example.com", staticFrontend: false };
+      for (const json of [{ success: false }, { id: 123 }, null, { success: "true" }]) {
+        const request = vi.fn(async () => new Response(
+          JSON.stringify([{ result: { data: { json } } }]),
+          { status: 200, headers: { "content-type": "application/json" } }
+        ));
+        await expect(postPublicProcedure(procedure, {}, config, request))
+          .rejects.toThrow("No se pudo completar la solicitud.");
+      }
+    }
+  );
+
+  it("rejects a tRPC error even when a success object is also present", async () => {
+    const config = { pageOrigin: "https://studio.example.com", staticFrontend: false };
+    const request = vi.fn(async () => new Response(JSON.stringify([{
+      result: { data: { json: { success: true } } },
+      error: { message: "No permitido" },
+    }]), { headers: { "content-type": "application/json" } }));
+    await expect(postPublicProcedure("bookings.create", {}, config, request))
+      .rejects.toThrow("No permitido");
+  });
 });

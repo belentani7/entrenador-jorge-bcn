@@ -81,6 +81,16 @@ export async function postPublicProcedure<T>(
   const data = first?.result?.data?.json;
   const message = first?.error?.json?.message ?? first?.error?.message ??
     first?.result?.data?.error?.message ?? "No se pudo completar la solicitud.";
-  if (!response.ok || data === undefined) throw new Error(message);
+  // Both public mutations return { success: true }. A 200 response with a
+  // missing/false success flag must never be shown as a confirmed booking.
+  if (
+    !response.ok ||
+    first?.error ||
+    first?.result?.data?.error ||
+    !data ||
+    typeof data !== "object" ||
+    Array.isArray(data) ||
+    (data as { success?: unknown }).success !== true
+  ) throw new Error(message);
   return data;
 }
