@@ -1,6 +1,6 @@
 type EmailPayload = { to: string; subject: string; html: string };
 
-const escapeHtml = (value: string) =>
+export const escapeHtml = (value: string) =>
   value.replace(
     /[&<>"']/g,
     character =>

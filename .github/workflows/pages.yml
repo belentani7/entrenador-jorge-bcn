@@ -29,10 +29,17 @@ jobs:
           cache: pnpm
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: TypeScript gate
+        run: pnpm check
+      - name: Backend and booking regression suite
+        run: pnpm test
       - name: Build static frontend
         run: pnpm exec vite build
         env:
           GITHUB_ACTIONS: true
+          # Static Pages cannot process personal data without an explicitly verified backend.
+          VITE_STATIC_FRONTEND: "true"
+          VITE_PUBLIC_API_ORIGIN: ${{ vars.PUBLIC_API_ORIGIN }}
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact

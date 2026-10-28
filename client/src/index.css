@@ -1548,3 +1548,20 @@ small {
     opacity: 0.82;
   }
 }
+
+/* Explicit, readable fail-closed state for static contact/booking forms. */
+.form-unavailable {
+  margin: 0;
+  padding: 12px 14px;
+  border-left: 3px solid var(--primary);
+  background: #29180f;
+  color: #f5e4d8;
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+.booking-form button:disabled,
+.lead-form button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}

@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import {
   int,
   mysqlEnum,
@@ -39,6 +40,13 @@ export const bookings = mysqlTable("bookings", {
   status: mysqlEnum("status", ["pending", "confirmed", "cancelled"])
     .default("pending")
     .notNull(),
+  // MySQL UNIQUE allows multiple NULL values for pending/cancelled slots.
+  confirmedSlot: varchar("confirmedSlot", { length: 16 })
+    .generatedAlwaysAs(
+      sql`CASE WHEN \`status\` = 'confirmed' THEN CONCAT(\`date\`, 'T', \`time\`) ELSE NULL END`,
+      { mode: "stored" }
+    )
+    .unique("bookings_confirmedSlot_unique"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 

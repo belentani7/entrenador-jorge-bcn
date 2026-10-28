@@ -61,3 +61,16 @@ Los textos, fotografías de clientes, historias, valoraciones y resultados deben
 ## Firma técnica
 
 La firma discreta del proyecto es `belentani.eu · Pedro Belentani · noiacore.com` y aparece en el frontend y en la identificación técnica del servidor.
+
+
+## Horario real y garantías de reservas (octubre de 2026)
+
+Los formularios se verifican en `Europe/Madrid` con fechas de calendario reales, teniendo en cuenta los cambios de horario de invierno/verano. No se permiten franjas de hoy que ya han pasado en Barcelona. Las plantillas HTML de notificación al entrenador escapan los datos introducidos por el visitante. La CI de Pages ahora exige el chequeo de tipos y los tests antes de publicar la página estática.
+
+**Límite conocido y bloqueo de producción:** la PR incluye una restricción única para reservas confirmadas y elimina la dependencia de `hasBooking` en la creación; sin embargo, la migración 0002 y las solicitudes concurrentes todavía **no se han validado en MySQL real**. El servidor comprueba el índice y la expresión generada antes de aceptar reservas. Hasta completar migración, suite integral y prueba de concurrencia, las reservas requieren supervisión operativa. GitHub Pages no almacena leads por sí solo.
+
+## Integridad de reservas concurrentes (migración 0002)
+
+La PR añade una columna calculada `confirmedSlot` y un índice único MySQL para impedir reservas **confirmadas** duplicadas de la misma fecha y hora incluso con solicitudes concurrentes. Reservas pendientes/canceladas no bloquean el horario. El servidor rechaza reservas si el índice aún no existe; las colisiones se devuelven como `CONFLICT` sin enviar correos.
+
+**Antes de migrar una base real**, hacer copia restaurable y consultar duplicados sin tocar registros: `SELECT date, time, COUNT(*) AS total FROM bookings WHERE status = 'confirmed' GROUP BY date, time HAVING COUNT(*) > 1;`. Resolverlos con el responsable: la migración falla en vez de borrar datos. Ejecutar `pnpm db:push` solo con acceso autorizado a MySQL y ventana de mantenimiento. No se ha probado migración, concurrencia MySQL, suite integral ni navegador; no publicar hasta hacerlo. La comprobación del índice valida también metadatos de la columna generada; esto no sustituye la prueba con MySQL real.

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
@@ -7,9 +8,11 @@ import { publicProcedure, router } from "./_core/trpc";
 /**
  * Backend crafted by belentani.eu · Pedro Belentani · noiacore.com
  */
-import { createBooking, createLead, hasBooking } from "./db";
+import { createBooking, createLead } from "./db";
+import { BookingSlotConflictError } from "./booking-constraints";
 import { notifyOwner } from "./_core/notification";
-import { confirmationEmail, sendTransactionalEmail } from "./email";
+import { confirmationEmail, sendTransactionalEmail, escapeHtml } from "./email";
+import {barcelonaNow,isBookableSlot,validCalendarDate} from "./booking-time";
 
 export function resolveOwnerNotification(
   internalNotified: boolean,
@@ -31,8 +34,9 @@ const bookingTimes = ["07:00", "09:00", "13:30", "18:00", "19:30"] as const;
 const bookingDate = z
   .string()
   .regex(/^\d{4}-\d{2}-\d{2}$/)
-  .refine(value => value >= new Date().toISOString().slice(0, 10), {
-    message: "La fecha debe ser hoy o posterior.",
+  .refine(validCalendarDate, {message:"Fecha de calendario inválida."})
+  .refine(value=>value>=barcelonaNow().date,{
+    message:"La fecha debe ser hoy o posterior en Barcelona.",
   });
 
 export const appRouter = router({
@@ -71,12 +75,22 @@ export const appRouter = router({
           ...contactFields,
           date: bookingDate,
           time: z.enum(bookingTimes),
+        }).superRefine((value,ctx)=>{
+          if(!isBookableSlot(value.date,value.time)){
+            ctx.addIssue({code:"custom",path:["time"],message:"El horario ya ha pasado en Barcelona."});
+          }
         })
       )
       .mutation(async ({ input }) => {
-        if (await hasBooking(input.date, input.time))
-          throw new Error("Ese horario ya está reservado. Elige otro momento.");
-        const result = await createBooking({ ...input, status: "confirmed" });
+        let result: Awaited<ReturnType<typeof createBooking>>;
+        try {
+          result = await createBooking({ ...input, status: "confirmed" });
+        } catch (error) {
+          if (error instanceof BookingSlotConflictError) {
+            throw new TRPCError({ code: "CONFLICT", message: error.message });
+          }
+          throw error;
+        }
         const notified = await notifyOwner({
           title: "Nueva reserva de sesión de prueba",
           content: `${input.name} ha solicitado una sesión el ${input.date} a las ${input.time}. Email: ${input.email}. Teléfono: ${input.phone}.`,
@@ -91,7 +105,7 @@ export const appRouter = router({
           ? await sendTransactionalEmail({
               to: ownerEmail,
               subject: "Nueva reserva confirmada · Jorge Performance",
-              html: `<p>Nueva reserva de ${input.name} para el ${input.date} a las ${input.time}. Email: ${input.email}. Teléfono: ${input.phone}.</p>`,
+              html: `<p>Nueva reserva de ${escapeHtml(input.name)} para el ${escapeHtml(input.date)} a las ${escapeHtml(input.time)}. Email: ${escapeHtml(input.email)}. Teléfono: ${escapeHtml(input.phone)}.</p>`,
             })
           : false;
         const ownerNotification = resolveOwnerNotification(

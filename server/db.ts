@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
   InsertBooking,
@@ -9,6 +9,12 @@ import {
   users,
 } from "../drizzle/schema";
 import { ENV } from "./_core/env";
+import {
+  BOOKING_SLOT_INDEX,
+  BookingSlotConflictError,
+  hasConfirmedSlotUniqueIndex,
+  isBookingSlotDuplicate,
+} from "./booking-constraints";
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
@@ -93,6 +99,38 @@ export async function hasBooking(date: string, time: string) {
 
 export async function createBooking(input: InsertBooking) {
   const db = await requireDb();
-  const result = await db.insert(bookings).values(input);
-  return { id: Number(result[0].insertId) };
+
+  // A preflight SELECT cannot serialize concurrent booking requests.
+  // Refuse writes until the database-level unique index is installed.
+  const [indexRows] = await db.execute(sql`
+    SELECT COUNT(*) AS indexCount,
+           COALESCE(SUM(CASE WHEN S.COLUMN_NAME = 'confirmedSlot'
+                             AND S.NON_UNIQUE = 0
+                             AND S.SEQ_IN_INDEX = 1
+                             AND S.SUB_PART IS NULL THEN 1 ELSE 0 END), 0) AS correctCount,
+           MAX(C.EXTRA) AS generatedExtra,
+           MAX(C.GENERATION_EXPRESSION) AS generationExpression,
+           MAX(C.DATA_TYPE) AS columnType,
+           MAX(C.CHARACTER_MAXIMUM_LENGTH) AS columnLength,
+           MAX(C.IS_NULLABLE) AS nullable
+    FROM information_schema.STATISTICS S
+    LEFT JOIN information_schema.COLUMNS C
+      ON C.TABLE_SCHEMA = S.TABLE_SCHEMA
+     AND C.TABLE_NAME = S.TABLE_NAME
+     AND C.COLUMN_NAME = S.COLUMN_NAME
+    WHERE S.TABLE_SCHEMA = DATABASE()
+      AND S.TABLE_NAME = 'bookings'
+      AND S.INDEX_NAME = ${BOOKING_SLOT_INDEX}
+  `);
+  if (!hasConfirmedSlotUniqueIndex(indexRows)) {
+    throw new Error("Booking slot uniqueness migration is missing; bookings disabled.");
+  }
+
+  try {
+    const result = await db.insert(bookings).values(input);
+    return { id: Number(result[0].insertId) };
+  } catch (error) {
+    if (isBookingSlotDuplicate(error)) throw new BookingSlotConflictError();
+    throw error;
+  }
 }
