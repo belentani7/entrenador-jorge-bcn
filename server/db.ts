@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
   InsertBooking,
@@ -9,6 +9,12 @@ import {
   users,
 } from "../drizzle/schema";
 import { ENV } from "./_core/env";
+import {
+  BOOKING_SLOT_INDEX,
+  BookingSlotConflictError,
+  hasConfirmedSlotUniqueIndex,
+  isBookingSlotDuplicate,
+} from "./booking-constraints";
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
@@ -93,6 +99,27 @@ export async function hasBooking(date: string, time: string) {
 
 export async function createBooking(input: InsertBooking) {
   const db = await requireDb();
-  const result = await db.insert(bookings).values(input);
-  return { id: Number(result[0].insertId) };
+
+  // A preflight SELECT cannot serialize concurrent booking requests.
+  // Refuse writes until the database-level unique index is installed.
+  const [indexRows] = await db.execute(sql`
+    SELECT COUNT(*) AS indexCount,
+           COALESCE(SUM(CASE WHEN COLUMN_NAME = 'confirmedSlot'
+                             AND NON_UNIQUE = 0 THEN 1 ELSE 0 END), 0) AS correctCount
+    FROM information_schema.STATISTICS
+    WHERE TABLE_SCHEMA = DATABASE()
+      AND TABLE_NAME = 'bookings'
+      AND INDEX_NAME = ${BOOKING_SLOT_INDEX}
+  `);
+  if (!hasConfirmedSlotUniqueIndex(indexRows)) {
+    throw new Error("Booking slot uniqueness migration is missing; bookings disabled.");
+  }
+
+  try {
+    const result = await db.insert(bookings).values(input);
+    return { id: Number(result[0].insertId) };
+  } catch (error) {
+    if (isBookingSlotDuplicate(error)) throw new BookingSlotConflictError();
+    throw error;
+  }
 }

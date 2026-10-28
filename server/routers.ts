@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
@@ -7,7 +8,8 @@ import { publicProcedure, router } from "./_core/trpc";
 /**
  * Backend crafted by belentani.eu · Pedro Belentani · noiacore.com
  */
-import { createBooking, createLead, hasBooking } from "./db";
+import { createBooking, createLead } from "./db";
+import { BookingSlotConflictError } from "./booking-constraints";
 import { notifyOwner } from "./_core/notification";
 import { confirmationEmail, sendTransactionalEmail, escapeHtml } from "./email";
 import {barcelonaNow,isBookableSlot,validCalendarDate} from "./booking-time";
@@ -80,9 +82,15 @@ export const appRouter = router({
         })
       )
       .mutation(async ({ input }) => {
-        if (await hasBooking(input.date, input.time))
-          throw new Error("Ese horario ya está reservado. Elige otro momento.");
-        const result = await createBooking({ ...input, status: "confirmed" });
+        let result: Awaited<ReturnType<typeof createBooking>>;
+        try {
+          result = await createBooking({ ...input, status: "confirmed" });
+        } catch (error) {
+          if (error instanceof BookingSlotConflictError) {
+            throw new TRPCError({ code: "CONFLICT", message: error.message });
+          }
+          throw error;
+        }
         const notified = await notifyOwner({
           title: "Nueva reserva de sesión de prueba",
           content: `${input.name} ha solicitado una sesión el ${input.date} a las ${input.time}. Email: ${input.email}. Teléfono: ${input.phone}.`,
