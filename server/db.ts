@@ -104,12 +104,23 @@ export async function createBooking(input: InsertBooking) {
   // Refuse writes until the database-level unique index is installed.
   const [indexRows] = await db.execute(sql`
     SELECT COUNT(*) AS indexCount,
-           COALESCE(SUM(CASE WHEN COLUMN_NAME = 'confirmedSlot'
-                             AND NON_UNIQUE = 0 THEN 1 ELSE 0 END), 0) AS correctCount
-    FROM information_schema.STATISTICS
-    WHERE TABLE_SCHEMA = DATABASE()
-      AND TABLE_NAME = 'bookings'
-      AND INDEX_NAME = ${BOOKING_SLOT_INDEX}
+           COALESCE(SUM(CASE WHEN S.COLUMN_NAME = 'confirmedSlot'
+                             AND S.NON_UNIQUE = 0
+                             AND S.SEQ_IN_INDEX = 1
+                             AND S.SUB_PART IS NULL THEN 1 ELSE 0 END), 0) AS correctCount,
+           MAX(C.EXTRA) AS generatedExtra,
+           MAX(C.GENERATION_EXPRESSION) AS generationExpression,
+           MAX(C.DATA_TYPE) AS columnType,
+           MAX(C.CHARACTER_MAXIMUM_LENGTH) AS columnLength,
+           MAX(C.IS_NULLABLE) AS nullable
+    FROM information_schema.STATISTICS S
+    LEFT JOIN information_schema.COLUMNS C
+      ON C.TABLE_SCHEMA = S.TABLE_SCHEMA
+     AND C.TABLE_NAME = S.TABLE_NAME
+     AND C.COLUMN_NAME = S.COLUMN_NAME
+    WHERE S.TABLE_SCHEMA = DATABASE()
+      AND S.TABLE_NAME = 'bookings'
+      AND S.INDEX_NAME = ${BOOKING_SLOT_INDEX}
   `);
   if (!hasConfirmedSlotUniqueIndex(indexRows)) {
     throw new Error("Booking slot uniqueness migration is missing; bookings disabled.");

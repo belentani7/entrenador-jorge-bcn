@@ -21,11 +21,30 @@ export function isBookingSlotDuplicate(error: unknown): boolean {
   return false;
 }
 
-/** Fail closed if the migration has not installed the expected unique index. */
+/**
+ * Require the actual generated expression, not merely an index with a matching
+ * name. A writable or incorrectly generated column would allow two confirmed
+ * bookings for the same time while passing a name-only metadata check.
+ */
 export function hasConfirmedSlotUniqueIndex(rows: unknown): boolean {
   if (!Array.isArray(rows) || rows.length !== 1) return false;
   const row = rows[0];
   if (!row || typeof row !== "object") return false;
-  const result = row as { indexCount?: unknown; correctCount?: unknown };
-  return Number(result.indexCount) === 1 && Number(result.correctCount) === 1;
+  const result = row as Record<string, unknown>;
+  const countIsOne = (value: unknown) => value === 1 || value === "1";
+  if (!countIsOne(result.indexCount) || !countIsOne(result.correctCount)) return false;
+  if (typeof result.generatedExtra !== "string" ||
+      !/\bstored\s+generated\b/i.test(result.generatedExtra)) return false;
+  if (result.columnType !== "varchar" || !(
+    result.columnLength === 16 || result.columnLength === "16"
+  ) || result.nullable !== "YES") return false;
+  if (typeof result.generationExpression !== "string") return false;
+
+  // MySQL can add charset introducers, backticks and grouping parentheses to
+  // the canonical expression returned by information_schema.COLUMNS.
+  const expression = result.generationExpression
+    .toLowerCase()
+    .replace(/_utf8mb[34]/g, "")
+    .replace(/[`\s()]/g, "");
+  return expression === "casewhenstatus='confirmed'thenconcatdate,'t',timeelsenullend";
 }
