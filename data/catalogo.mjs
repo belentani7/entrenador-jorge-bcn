@@ -1,0 +1,33 @@
+// Banco de datos canónico. Generado por repo-forge.
+export const catalogo = {
+  "nombre": "entrenador-jorge-bcn",
+  "remoto": "https://github.com/belentani7/entrenador-jorge-bcn",
+  "tipo": "web-app",
+  "modelo": "landing premium con asistente fitness",
+  "publico": "clientes de entrenamiento personal en Barcelona",
+  "licencia": "MIT",
+  "medido": {
+    "archivos": 174,
+    "lineas": 27493,
+    "bytes": 1836185,
+    "html": 8,
+    "tests": 6
+  },
+  "modulos": [
+    "Hero",
+    "Programas",
+    "Casos",
+    "Asistente",
+    "Reserva"
+  ],
+  "paleta": {
+    "bg": "#ffffff",
+    "ink": "#141414",
+    "accent": "#2e5fe9"
+  },
+  "fuente": {
+    "ruta": "repos\\entrenador-jorge-bcn",
+    "fecha": "2026-11-10"
+  }
+};
+export default catalogo;

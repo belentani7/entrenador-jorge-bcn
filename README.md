@@ -61,3 +61,77 @@ Los textos, fotografías de clientes, historias, valoraciones y resultados deben
 ## Firma técnica
 
 La firma discreta del proyecto es `belentani.eu · Pedro Belentani · noiacore.com` y aparece en el frontend y en la identificación técnica del servidor.
+
+<!-- repo-forge:readme:inicio -->
+## Qué es
+
+**Jorge · Entrenador** — landing premium con asistente fitness.
+
+Decir la verdad del precio, el plazo y el resultado, y hacer que dar el paso sea fácil.
+
+## Estado medido
+
+| Dato | Valor |
+|---|---|
+| Lenguajes | JavaScript, TypeScript, YAML, CSS, HTML, JSON |
+| Archivos / líneas | 174 / 27493 |
+| Páginas HTML | 8 |
+| Tests detectados | 6 |
+| Cumplimiento de reglas | 37/37 (100.0%) |
+
+Todo lo anterior se midió en disco el 2026-11-10; no es una estimación.
+
+## Uso
+
+```bash
+npm install
+npm run dev
+```
+
+## Estructura
+
+```
+assets/
+brand/
+client/
+data/
+docs/
+drizzle/
+magic/
+patches/
+plataforma/
+producto/
+```
+
+## Diseño de plataforma
+
+- Hero
+- Programas
+- Casos
+- Asistente
+- Reserva
+
+La ficha completa —máximo potencial, marca, fases de monetización y recursos— vive en
+[`plataforma/FICHA.md`](plataforma/FICHA.md). Los tokens de marca están en
+[`brand/tokens.css`](brand/tokens.css).
+
+## Reglas del proyecto
+
+Este repositorio sigue el catálogo oficial del ecosistema (`GH-*`, `WEB-*`, `ACC-*`,
+`SEO-*`, `COH-*`, `DEV-*`). El gate se ejecuta con:
+
+```bash
+python scripts/doctor.py
+```
+
+## Licencia
+
+MIT. Ver [`LICENSE`](LICENSE).
+<!-- repo-forge:readme:fin -->
+<!-- repo-forge:readme:fin -->
+<!-- repo-forge:readme:fin -->
+<!-- repo-forge:readme:fin -->
+
+## Producto
+
+Oferta, precio y cobro: [`producto/OFERTA.md`](producto/OFERTA.md) · [`producto/precios.json`](producto/precios.json) · [`producto/landing.html`](producto/landing.html)
