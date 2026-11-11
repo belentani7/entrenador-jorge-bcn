@@ -1,0 +1,77 @@
+{
+  "esquema": "repo-forge/ficha/1",
+  "nombre": "entrenador-jorge-bcn",
+  "remoto": "https://github.com/belentani7/entrenador-jorge-bcn",
+  "arquetipo": "web-app",
+  "stack": "React + JavaScript",
+  "modelo": "landing premium con asistente fitness",
+  "publico": "clientes de entrenamiento personal en Barcelona",
+  "techo": "captación que convierte: plan de prueba, casos reales y asistente que responde dudas sin inventar",
+  "modulos": [
+    "Hero",
+    "Programas",
+    "Casos",
+    "Asistente",
+    "Reserva"
+  ],
+  "no_go": "consejo médico, promesas de resultado",
+  "marca": {
+    "nombre": "Jorge · Entrenador",
+    "familia": "comercio",
+    "paleta": {
+      "familia": "comercio",
+      "bg": "#ffffff",
+      "surface": "#f9f9f9",
+      "ink": "#141414",
+      "muted": "#6d6d6d",
+      "accent": "#2e5fe9",
+      "accent2": "#d97706",
+      "ok": "#15803d",
+      "warn": "#b45309",
+      "danger": "#b91c1c",
+      "contraste_ink_bg": 18.42,
+      "contraste_accent_bg": 5.34,
+      "accent_sobre_bg_ok": true
+    },
+    "narrativa": "Que el cliente decida sin fricción"
+  },
+  "paywall": {
+    "principio": "sin muro: el visitante ve precio y resultado antes de dar datos",
+    "fases": 4
+  },
+  "medido": {
+    "archivos": 174,
+    "lineas": 27493,
+    "html": 8,
+    "tests": 6,
+    "bytes": 1836185,
+    "lenguajes": {
+      "JavaScript": 47.2,
+      "TypeScript": 20.8,
+      "YAML": 17.3,
+      "CSS": 7.9,
+      "HTML": 3.8,
+      "JSON": 1.7
+    },
+    "fecha": "2026-11-10"
+  },
+  "gate": {
+    "pass": 37,
+    "fail": 0,
+    "skip": 12,
+    "cumplimiento": 100.0,
+    "fallos": []
+  },
+  "ajustes": {
+    "total": 64,
+    "aplicados": 56,
+    "ya_estaban": 8,
+    "fallos": 0
+  },
+  "esfuerzo_dias": 51,
+  "doctor": {
+    "ok": true,
+    "detalle": "38/38 comprobaciones en verde"
+  },
+  "huella": "703f5e159b6537b1"
+}

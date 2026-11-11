@@ -57,3 +57,52 @@ Proveer valor a través de tecnología moderna, código mantenible y experiencia
 - Monorepo o repositorio independiente según el producto
 - Despliegue por copia de archivos (cero build) salvo que se especifique lo contrario
 - Working trees respetados: no se sobrescriben cambios sin restaurar desde HEAD
+
+<!-- repo-forge:biblia:inicio -->
+# BIBLIA.md — entrenador-jorge-bcn
+
+Doctrina del producto del repositorio `entrenador-jorge-bcn` del ecosistema belentani7.
+
+## Visión
+
+captación que convierte: plan de prueba, casos reales y asistente que responde dudas sin inventar
+
+## Misión
+
+Decir la verdad del precio, el plazo y el resultado, y hacer que dar el paso sea fácil.
+
+## Público
+
+clientes de entrenamiento personal en Barcelona
+
+## Stack
+
+aplicación web con build (Next/Vite/Expo) · JavaScript, TypeScript, YAML, CSS, HTML, JSON
+
+## Módulos que la promesa exige
+
+- Hero
+- Programas
+- Casos
+- Asistente
+- Reserva
+
+## Reglas de desarrollo
+
+- Protocolo spec-first: PRD → SRS → Design Doc → ADR → Plan → Tests.
+- Un cambio, un resultado verificable.
+- Nada se afirma sin ejecución; lo no probado se declara como no probado.
+- Escritura solo con confirmación; nada destructivo.
+- Idioma del producto: español, salvo el público del repositorio.
+- Secreto fuera de disco, logs y manifiestos.
+
+## Lo que este repositorio no va a hacer
+
+consejo médico, promesas de resultado
+
+## Convenciones
+
+`type(scope): resumen` — feat, fix, docs, chore, refactor, test, perf.
+
+<!-- repo-forge:biblia -->
+<!-- repo-forge:biblia:fin -->

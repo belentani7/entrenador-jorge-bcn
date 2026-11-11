@@ -1,0 +1,17 @@
+{
+  "name": "Jorge · Entrenador",
+  "short_name": "Jorge · Entr",
+  "description": "landing premium con asistente fitness",
+  "lang": "es",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2e5fe9",
+  "icons": [
+    {
+      "src": "assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
