@@ -61,3 +61,7 @@ Los textos, fotografías de clientes, historias, valoraciones y resultados deben
 ## Firma técnica
 
 La firma discreta del proyecto es `belentani.eu · Pedro Belentani · noiacore.com` y aparece en el frontend y en la identificación técnica del servidor.
+
+
+## Producto
+Véase `plataforma/OFERTA.md`, `plataforma/precios.json`, `plataforma/ONEPAGER.md`.

@@ -7,16 +7,11 @@ import {
   ArrowUpRight,
   CalendarDays,
   Check,
-  ChevronLeft,
-  ChevronRight,
   Clock3,
   Dumbbell,
   Flame,
-  Instagram,
-  Mail,
   MapPin,
   Menu,
-  Phone,
   Sparkles,
   Users,
   X,
@@ -31,11 +26,6 @@ const heroImage =
   "https://jorgefit-zvv3n2zn.manus.space/manus-storage/jorge-hero-body-only_6847b003.png";
 const storyImage =
   "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=1200&q=85";
-const gallery = [
-  "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1000&q=85",
-  "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1000&q=85",
-  "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=1000&q=85",
-];
 
 const minBookingDate = new Date(
   Date.now() - new Date().getTimezoneOffset() * 60_000
@@ -101,10 +91,6 @@ const services = [
 export default function Home() {
   const root = useRef<HTMLDivElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [galleryIndex, setGalleryIndex] = useState(0);
-  const [testimonialIndex, setTestimonialIndex] = useState(0);
-  const [comparison, setComparison] = useState(58);
-  const [mediaConsent, setMediaConsent] = useState(false);
   const [leadSubmitting, setLeadSubmitting] = useState(false);
   const [bookingSubmitting, setBookingSubmitting] = useState(false);
   const [lead, setLead] = useState({
@@ -177,11 +163,19 @@ export default function Home() {
         "Completa todos los campos para que Jorge pueda contactarte."
       );
     setLeadSubmitting(true);
-    void postPublicProcedure("leads.create", lead)
-      .then(() => {
-        toast.success(
-          "Gracias. Jorge recibirá tus datos y te escribirá muy pronto."
-        );
+    void postPublicProcedure<{
+      ownerNotified: boolean;
+    }>("leads.create", lead)
+      .then(result => {
+        if (result.ownerNotified) {
+          toast.success(
+            "Gracias. Jorge ha recibido tu consulta y te escribirá pronto."
+          );
+        } else {
+          toast.warning(
+            "Tu consulta se ha guardado, pero el aviso automático a Jorge no está disponible. La respuesta podría demorarse."
+          );
+        }
         setLead({
           name: "",
           email: "",
@@ -223,7 +217,7 @@ export default function Home() {
         toast.success(
           result.ownerNotified
             ? "Solicitud recibida. Jorge ha sido notificado y confirmará tu sesión."
-            : "Solicitud recibida. Jorge revisará tu petición y confirmará tu sesión."
+            : "Tu solicitud se ha guardado, pero el aviso automático a Jorge no está disponible. La respuesta podría demorarse."
         );
         setBooking({ name: "", email: "", phone: "", date: "", time: "" });
       })
@@ -249,14 +243,6 @@ export default function Home() {
             description:
               "Entrenamiento personal, online y nutrición en Barcelona.",
             areaServed: "Barcelona",
-            telephone: "+34 600 000 000",
-            email: "hola@jorgeperformance.es",
-            url: "https://jorgeperformance.es",
-            address: {
-              "@type": "PostalAddress",
-              addressLocality: "Barcelona",
-              addressCountry: "ES",
-            },
             priceRange: "€€",
           }),
         }}
@@ -269,7 +255,7 @@ export default function Home() {
           </span>
         </a>
         <nav className={menuOpen ? "nav-links nav-open" : "nav-links"}>
-          {["Historia", "Servicios", "Transformaciones", "Reserva"].map(
+          {["Historia", "Servicios", "Método", "Reserva"].map(
             item => (
               <a
                 key={item}
@@ -287,7 +273,8 @@ export default function Home() {
         <button
           className="menu-button"
           onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Abrir menú"
+                aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+                aria-expanded={menuOpen}
         >
           {menuOpen ? <X /> : <Menu />}
         </button>
@@ -482,92 +469,38 @@ export default function Home() {
           </div>
         </section>
 
-        <section
-          id="transformaciones"
-          className="transform-section section-pad"
-        >
+        <section id="metodo" className="transform-section section-pad">
           <div className="container">
             <div className="section-heading reveal">
               <div>
-                <p className="eyebrow orange-text">El cambio se nota</p>
+                <p className="eyebrow orange-text">Progreso con sentido</p>
                 <h2>
-                  Transformaciones
+                  Un proceso claro.
                   <br />
-                  <em>que cuentan historias.</em>
+                  <em>Avances que medimos.</em>
                 </h2>
               </div>
               <p>
-                La imagen es solo una parte. Celebramos más energía, más fuerza,
-                mejor descanso y la confianza de cumplir lo que te prometiste.
+                Cada plan parte de tu punto de inicio. Revisamos cómo te mueves,
+                qué puedes sostener y qué señales indican que estás avanzando.
               </p>
             </div>
-            <div className="comparison-wrap reveal">
-              <div className="comparison-image after-image">
-                <img
-                  src={gallery[galleryIndex]}
-                  alt="Persona entrenando en gimnasio"
-                />
-              </div>
-              <div
-                className="comparison-image before-image"
-                style={{ width: `${comparison}%` }}
-              >
-                <img
-                  src={gallery[(galleryIndex + 1) % gallery.length]}
-                  alt="Proceso de entrenamiento y cambio físico"
-                />
-              </div>
-              <span className="comparison-label before-label">Sesión</span>
-              <span className="comparison-label after-label">Trabajo real</span>
-              <div
-                className="comparison-handle"
-                style={{ left: `${comparison}%` }}
-              >
-                <span />
-              </div>
-              <input
-                aria-label="Comparar proceso y progreso"
-                className="comparison-range"
-                type="range"
-                min="10"
-                max="90"
-                value={comparison}
-                onChange={e => setComparison(Number(e.target.value))}
-                disabled={!mediaConsent}
-              />
-            </div>
-            <label className="media-consent">
-              <input
-                type="checkbox"
-                checked={mediaConsent}
-                onChange={e => setMediaConsent(e.target.checked)}
-              />{" "}
-              Activar la comparación visual. Las imágenes reales de clientes
-              solo se publicarán con autorización expresa.
-            </label>
-            <div className="gallery-controls">
-              <button
-                onClick={() =>
-                  setGalleryIndex(
-                    (galleryIndex + gallery.length - 1) % gallery.length
-                  )
-                }
-                aria-label="Imagen anterior"
-              >
-                <ChevronLeft />
-              </button>
-              <span>
-                {String(galleryIndex + 1).padStart(2, "0")} /{" "}
-                {String(gallery.length).padStart(2, "0")}
-              </span>
-              <button
-                onClick={() =>
-                  setGalleryIndex((galleryIndex + 1) % gallery.length)
-                }
-                aria-label="Imagen siguiente"
-              >
-                <ChevronRight />
-              </button>
+            <div className="progress-principles reveal">
+              <article>
+                <span>01</span>
+                <h3>Un punto de partida real</h3>
+                <p>Definimos objetivos y adaptamos el plan a tu experiencia, tiempo y contexto.</p>
+              </article>
+              <article>
+                <span>02</span>
+                <h3>Práctica con intención</h3>
+                <p>Trabajamos técnica, fuerza y hábitos con una carga que puedas mantener.</p>
+              </article>
+              <article>
+                <span>03</span>
+                <h3>Revisión y ajustes</h3>
+                <p>Revisamos sensaciones y progreso para decidir juntos el siguiente paso.</p>
+              </article>
             </div>
           </div>
         </section>
@@ -607,14 +540,6 @@ export default function Home() {
                 <span>
                   <Check size={17} /> Sin permanencia
                 </span>
-              </div>
-              <div className="contact-mini">
-                <a href="tel:+34600000000">
-                  <Phone size={16} /> +34 600 000 000
-                </a>
-                <a href="mailto:hola@jorgeperformance.es">
-                  <Mail size={16} /> hola@jorgeperformance.es
-                </a>
               </div>
             </div>
             <form className="booking-form reveal" onSubmit={submitBooking}>
@@ -690,7 +615,7 @@ export default function Home() {
                   onChange={e =>
                     setBooking({ ...booking, phone: e.target.value })
                   }
-                  placeholder="+34 600 000 000"
+                  placeholder="+34…"
                 />
               </label>
               <button
@@ -794,51 +719,6 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="testimonials-section section-pad">
-          <div className="container">
-            <div className="section-heading reveal">
-              <div>
-                <p className="eyebrow orange-text">Prueba social con rigor</p>
-                <h2>
-                  Historias reales.
-                  <br />
-                  <em>Sin atajos.</em>
-                </h2>
-              </div>
-              <div className="testimonial-controls">
-                <button
-                  onClick={() => setTestimonialIndex(0)}
-                  aria-label="Historia anterior"
-                >
-                  <ChevronLeft />
-                </button>
-                <button
-                  onClick={() => setTestimonialIndex(1)}
-                  aria-label="Historia siguiente"
-                >
-                  <ChevronRight />
-                </button>
-              </div>
-            </div>
-            <div className="testimonial-card reveal">
-              <div className="stars">
-                CASO {String(testimonialIndex + 1).padStart(2, "0")}
-              </div>
-              <blockquote>
-                {testimonialIndex === 0
-                  ? "El primer caso real aparecerá aquí cuando Jorge disponga de una historia autorizada y verificable."
-                  : "Este espacio está preparado para una segunda historia real, con cita y fotografía aprobadas por la persona."}
-              </blockquote>
-              <div>
-                <strong>Contenido pendiente de autorización</strong>
-                <span>
-                  No se publican testimonios, fotos ni valoraciones inventadas.
-                </span>
-              </div>
-            </div>
-          </div>
-        </section>
-
         <section className="location-section">
           <div className="container location-grid">
             <div className="location-copy reveal">
@@ -900,14 +780,6 @@ export default function Home() {
           >
             belentani.eu · Pedro Belentani · noiacore.com
           </span>
-          <div className="footer-social">
-            <a href="#inicio" aria-label="Instagram">
-              <Instagram size={18} />
-            </a>
-            <a href="mailto:hola@jorgeperformance.es" aria-label="Email">
-              <Mail size={18} />
-            </a>
-          </div>
         </div>
       </footer>
       <AssistantWidget />

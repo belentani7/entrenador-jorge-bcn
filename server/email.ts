@@ -50,3 +50,17 @@ export function confirmationEmail(name: string, date?: string, time?: string) {
       : "";
   return `<div style="font-family:Arial,sans-serif;color:#111;line-height:1.6"><h1 style="color:#ff5b1a">Jorge Performance</h1><p>Hola ${safeName},</p><p>He recibido tus datos. Gracias por dar el primer paso.</p>${schedule}<p>Te escribiré personalmente para confirmar los detalles.</p></div>`;
 }
+
+export function ownerSubmissionEmail(
+  title: string,
+  details: Record<string, string>
+) {
+  const safeTitle = escapeHtml(title);
+  const rows = Object.entries(details)
+    .map(
+      ([label, value]) =>
+        `<li><strong>${escapeHtml(label)}:</strong> ${escapeHtml(value)}</li>`
+    )
+    .join("");
+  return `<div style="font-family:Arial,sans-serif;color:#111;line-height:1.6"><h1 style="color:#ff5b1a">${safeTitle}</h1><ul>${rows}</ul></div>`;
+}
