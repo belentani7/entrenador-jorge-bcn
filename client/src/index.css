@@ -380,8 +380,7 @@ h1 span {
   margin-top: 18px;
 }
 .services-section,
-.booking-section,
-.testimonials-section {
+.booking-section {
   background: #0b0b0b;
 }
 .section-heading {
@@ -451,133 +450,37 @@ h1 span {
 .transform-section .section-heading > p {
   color: #746e67;
 }
-.comparison-wrap {
-  position: relative;
-  height: min(62vw, 620px);
-  min-height: 360px;
-  overflow: hidden;
-  background: #232323;
-}
-.comparison-image {
-  position: absolute;
-  inset: 0;
-}
-.comparison-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.after-image img {
-  filter: saturate(0.85);
-}
-.before-image {
-  overflow: hidden;
-  border-right: 2px solid #ff5b1a;
-}
-.before-image img {
-  width: max(100vw, 1180px);
-  max-width: none;
-  object-position: left center;
-  filter: grayscale(1) contrast(1.1);
-}
-.comparison-label {
-  position: absolute;
-  top: 22px;
-  z-index: 2;
-  padding: 8px 12px;
-  background: #0b0b0b;
-  color: #fff;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-}
-.before-label {
-  left: 22px;
-}
-.after-label {
-  right: 22px;
-  background: #ff5b1a;
-  color: #0b0b0b;
-}
-.comparison-handle {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  z-index: 4;
-  width: 2px;
-  background: #ff5b1a;
-  pointer-events: none;
-}
-.comparison-handle span {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 42px;
-  height: 42px;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: #ff5b1a;
-  box-shadow: 0 4px 16px #0008;
-}
-.comparison-handle span::after {
-  content: "↔";
-  position: absolute;
-  inset: 0;
+.progress-principles {
   display: grid;
-  place-items: center;
-  color: #0b0b0b;
-  font-weight: 700;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid #cfcac2;
+  border-bottom: 1px solid #cfcac2;
 }
-.comparison-range {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  cursor: ew-resize;
+.progress-principles article {
+  padding: 28px 30px 32px 0;
 }
-.media-consent {
-  display: flex;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  gap: 9px;
-  width: fit-content;
-  margin: 14px 0 0;
-  color: #746e67;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0;
-  line-height: 1.5;
-  text-transform: none;
+.progress-principles article + article {
+  padding-left: 30px;
+  border-left: 1px solid #cfcac2;
 }
-.media-consent input {
-  width: 15px;
-  height: 15px;
-  accent-color: #ff5b1a;
-}
-.gallery-controls,
-.testimonial-controls {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
-.gallery-controls {
-  justify-content: center;
-  margin-top: 20px;
-  color: #746e67;
+.progress-principles article > span {
+  color: #b84210;
   font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
 }
-.gallery-controls button,
-.testimonial-controls button {
-  display: grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  border: 1px solid #cfcac2;
-  background: transparent;
-  color: inherit;
+.progress-principles h3 {
+  max-width: 18ch;
+  margin: 34px 0 12px;
+  font-size: 25px;
+  line-height: 1.1;
+}
+.progress-principles p {
+  max-width: 34ch;
+  margin: 0;
+  color: #625d57;
+  font-size: 14px;
+  line-height: 1.65;
 }
 .quote-section {
   padding: 145px 0;
@@ -643,18 +546,6 @@ h1 span {
 }
 .booking-points svg {
   color: #ff5b1a;
-}
-.contact-mini {
-  display: grid;
-  gap: 12px;
-  margin-top: 38px;
-  color: #ff5b1a;
-  font-size: 13px;
-}
-.contact-mini a {
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 .booking-form,
 .lead-form {
@@ -746,32 +637,6 @@ small {
 .lead-form {
   background: #0b0b0b;
   border-color: #393939;
-}
-.testimonial-card {
-  max-width: 850px;
-  min-height: 275px;
-  padding: 50px;
-  background: #ff5b1a;
-  color: #0b0b0b;
-}
-.stars {
-  margin-bottom: 25px;
-  letter-spacing: 0.22em;
-}
-.testimonial-card blockquote {
-  margin: 0 0 32px;
-  font:
-    700 clamp(1.6rem, 3vw, 3rem) / 1.1 "Space Grotesk",
-    sans-serif;
-  letter-spacing: -0.04em;
-}
-.testimonial-card div:last-child {
-  display: grid;
-  gap: 4px;
-  font-size: 12px;
-}
-.testimonial-card span {
-  opacity: 0.7;
 }
 .location-section {
   padding: 110px 0;
@@ -966,11 +831,19 @@ small {
   .service-card {
     min-height: 300px;
   }
-  .comparison-wrap {
-    height: 420px;
+  .progress-principles {
+    grid-template-columns: 1fr;
   }
-  .testimonial-card {
-    padding: 32px 25px;
+  .progress-principles article {
+    padding: 24px 0;
+  }
+  .progress-principles article + article {
+    padding-left: 0;
+    border-top: 1px solid #cfcac2;
+    border-left: 0;
+  }
+  .progress-principles h3 {
+    margin-top: 20px;
   }
   .map-card {
     height: 340px;
@@ -1006,10 +879,6 @@ small {
   }
   .form-row {
     grid-template-columns: 1fr;
-  }
-  .comparison-wrap {
-    min-height: 300px;
-    height: 85vw;
   }
 }
 @media (prefers-reduced-motion: reduce) {

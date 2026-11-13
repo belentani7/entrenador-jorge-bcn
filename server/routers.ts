@@ -9,7 +9,11 @@ import { publicProcedure, router } from "./_core/trpc";
  */
 import { createBooking, createLead, hasBooking } from "./db";
 import { notifyOwner } from "./_core/notification";
-import { confirmationEmail, sendTransactionalEmail } from "./email";
+import {
+  confirmationEmail,
+  ownerSubmissionEmail,
+  sendTransactionalEmail,
+} from "./email";
 
 export function resolveOwnerNotification(
   internalNotified: boolean,
@@ -61,7 +65,35 @@ export const appRouter = router({
           subject: "Hemos recibido tu mensaje · Jorge Performance",
           html: confirmationEmail(input.name),
         });
-        return { success: true, id: result.id, emailSent } as const;
+        const notified = await notifyOwner({
+          title: "Nueva consulta de entrenamiento",
+          content: `${input.name} ha enviado una consulta. Email: ${input.email}. Teléfono: ${input.phone}. Objetivo: ${input.goal}. Horario preferido: ${input.preferredTime}.`,
+        });
+        const ownerEmail = process.env.JORGE_EMAIL;
+        const ownerEmailSent = ownerEmail
+          ? await sendTransactionalEmail({
+              to: ownerEmail,
+              subject: "Nueva consulta · Jorge Performance",
+              html: ownerSubmissionEmail("Nueva consulta de entrenamiento", {
+                Nombre: input.name,
+                Email: input.email,
+                Teléfono: input.phone,
+                Objetivo: input.goal,
+                "Horario preferido": input.preferredTime,
+              }),
+            })
+          : false;
+        const ownerNotification = resolveOwnerNotification(
+          notified,
+          ownerEmailSent
+        );
+        return {
+          success: true,
+          id: result.id,
+          emailSent,
+          ownerNotified: ownerNotification.notified,
+          ownerNotificationChannel: ownerNotification.channel,
+        } as const;
       }),
   }),
   bookings: router({
@@ -75,10 +107,12 @@ export const appRouter = router({
       )
       .mutation(async ({ input }) => {
         if (await hasBooking(input.date, input.time))
-          throw new Error("Ese horario ya está reservado. Elige otro momento.");
-        const result = await createBooking({ ...input, status: "confirmed" });
+          throw new Error(
+            "Ese horario ya tiene una solicitud. Elige otro momento."
+          );
+        const result = await createBooking({ ...input, status: "pending" });
         const notified = await notifyOwner({
-          title: "Nueva reserva de sesión de prueba",
+          title: "Nueva solicitud de primera sesión",
           content: `${input.name} ha solicitado una sesión el ${input.date} a las ${input.time}. Email: ${input.email}. Teléfono: ${input.phone}.`,
         });
         const emailSent = await sendTransactionalEmail({
@@ -90,8 +124,17 @@ export const appRouter = router({
         const ownerEmailSent = ownerEmail
           ? await sendTransactionalEmail({
               to: ownerEmail,
-              subject: "Nueva reserva confirmada · Jorge Performance",
-              html: `<p>Nueva reserva de ${input.name} para el ${input.date} a las ${input.time}. Email: ${input.email}. Teléfono: ${input.phone}.</p>`,
+              subject: "Nueva solicitud de primera sesión · Jorge Performance",
+              html: ownerSubmissionEmail(
+                "Nueva solicitud de primera sesión",
+                {
+                  Nombre: input.name,
+                  Email: input.email,
+                  Teléfono: input.phone,
+                  Fecha: input.date,
+                  Hora: input.time,
+                }
+              ),
             })
           : false;
         const ownerNotification = resolveOwnerNotification(

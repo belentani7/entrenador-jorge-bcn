@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, ne } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
   InsertBooking,
@@ -84,7 +84,7 @@ export async function hasBooking(date: string, time: string) {
       and(
         eq(bookings.date, date),
         eq(bookings.time, time),
-        eq(bookings.status, "confirmed")
+        ne(bookings.status, "cancelled")
       )
     )
     .limit(1);
