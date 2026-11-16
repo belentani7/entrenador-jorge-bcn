@@ -80,7 +80,7 @@ color:var(--accent2);padding:4px 10px;border-radius:999px;margin:10px 0}
 <main id="contenido"><div class="wrap">
 <section class="hero">
     <div class="hero-canvas"></div>
-    <div class="hero-overlay">
+    <div class="hero-overlay" id="react-hero">
       <h1>entrenador-jorge-bcn</h1>
       <p>Repositorio entrenador-jorge-bcn — parte del ecosistema Belentani</p>
       <div class="hero-actions">
@@ -201,5 +201,18 @@ color:var(--accent2);padding:4px 10px;border-radius:999px;margin:10px 0}
   }catch(e){ console.log('WebGL init:', e.message); }
 })();
 </script>
+<script type="application/json" id="hero-data">
+{
+  "eyebrow": "",
+  "title": "entrenador-jorge-bcn",
+  "subtitle": "Repositorio entrenador-jorge-bcn — parte del ecosistema Belentani",
+  "install": "npm ci && npm run build",
+  "docsHref": "docs.html",
+  "repoHref": "https://github.com/belentani7/entrenador-jorge-bcn",
+  "demoHref": "",
+  "chips": []
+}
+</script>
+<script src="site-hero.js" defer></script>
 </body>
 </html>
