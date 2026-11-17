@@ -65,3 +65,10 @@ La firma discreta del proyecto es `belentani.eu · Pedro Belentani · noiacore.c
 
 ## Producto
 Véase `plataforma/OFERTA.md`, `plataforma/precios.json`, `plataforma/ONEPAGER.md`.
+
+## Verificacion
+
+```bash
+npm install
+npm test
+```
