@@ -1,3 +1,9 @@
+# Generated OS metadata, Python bytecode, and HTML reports
+__MACOSX/
+Desktop.ini
+desktop.ini
+playwright-report/
+
 # Dependencies
 **/node_modules
 .pnpm-store/
