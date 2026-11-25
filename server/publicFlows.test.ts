@@ -18,7 +18,7 @@ describe("public lead and booking flows", () => {
         phone: "",
         goal: "",
         preferredTime: "",
-      })
+      }),
     ).rejects.toThrow();
   });
 
@@ -31,7 +31,7 @@ describe("public lead and booking flows", () => {
         phone: "+34600000000",
         date: "mañana",
         time: "18h",
-      })
+      }),
     ).rejects.toThrow();
   });
 
@@ -44,7 +44,7 @@ describe("public lead and booking flows", () => {
         phone: "+34600000000",
         date: "2000-01-01",
         time: "18:15",
-      })
+      }),
     ).rejects.toThrow();
   });
 });

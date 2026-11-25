@@ -21,7 +21,7 @@ const redirectToLoginIfUnauthorized = (error: unknown) => {
   startLogin();
 };
 
-queryClient.getQueryCache().subscribe(event => {
+queryClient.getQueryCache().subscribe((event) => {
   if (event.type === "updated" && event.action.type === "error") {
     const error = event.query.state.error;
     redirectToLoginIfUnauthorized(error);
@@ -29,7 +29,7 @@ queryClient.getQueryCache().subscribe(event => {
   }
 });
 
-queryClient.getMutationCache().subscribe(event => {
+queryClient.getMutationCache().subscribe((event) => {
   if (event.type === "updated" && event.action.type === "error") {
     const error = event.mutation.state.error;
     redirectToLoginIfUnauthorized(error);
@@ -51,7 +51,9 @@ const trpcClient = trpc.createClient({
           const raw = sessionStorage.getItem("manus-cookie");
           if (raw) {
             const prefix = `${COOKIE_NAME}=`;
-            const pair = raw.split(";").find(s => s.trim().startsWith(prefix));
+            const pair = raw
+              .split(";")
+              .find((s) => s.trim().startsWith(prefix));
             const token = pair?.trim().slice(prefix.length);
             if (token) {
               return { Authorization: `Bearer ${token}` };
@@ -77,5 +79,5 @@ createRoot(document.getElementById("root")!).render(
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <App />
     </trpc.Provider>
-  </QueryClientProvider>
+  </QueryClientProvider>,
 );

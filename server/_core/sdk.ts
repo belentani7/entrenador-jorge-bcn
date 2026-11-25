@@ -38,7 +38,7 @@ class OAuthService {
     console.log("[OAuth] Initialized with baseURL:", ENV.oAuthServerUrl);
     if (!ENV.oAuthServerUrl) {
       console.error(
-        "[OAuth] ERROR: OAUTH_SERVER_URL is not configured! Set OAUTH_SERVER_URL environment variable."
+        "[OAuth] ERROR: OAUTH_SERVER_URL is not configured! Set OAUTH_SERVER_URL environment variable.",
       );
     }
   }
@@ -49,7 +49,7 @@ class OAuthService {
 
   async getTokenByCode(
     code: string,
-    state: string
+    state: string,
   ): Promise<ExchangeTokenResponse> {
     const payload: ExchangeTokenRequest = {
       clientId: ENV.appId,
@@ -60,20 +60,20 @@ class OAuthService {
 
     const { data } = await this.client.post<ExchangeTokenResponse>(
       EXCHANGE_TOKEN_PATH,
-      payload
+      payload,
     );
 
     return data;
   }
 
   async getUserInfoByToken(
-    token: ExchangeTokenResponse
+    token: ExchangeTokenResponse,
   ): Promise<GetUserInfoResponse> {
     const { data } = await this.client.post<GetUserInfoResponse>(
       GET_USER_INFO_PATH,
       {
         accessToken: token.accessToken,
-      }
+      },
     );
 
     return data;
@@ -97,12 +97,12 @@ class SDKServer {
 
   private deriveLoginMethod(
     platforms: unknown,
-    fallback: string | null | undefined
+    fallback: string | null | undefined,
   ): string | null {
     if (fallback && fallback.length > 0) return fallback;
     if (!Array.isArray(platforms) || platforms.length === 0) return null;
     const set = new Set<string>(
-      platforms.filter((p): p is string => typeof p === "string")
+      platforms.filter((p): p is string => typeof p === "string"),
     );
     if (set.has("REGISTERED_PLATFORM_EMAIL")) return "email";
     if (set.has("REGISTERED_PLATFORM_GOOGLE")) return "google";
@@ -124,7 +124,7 @@ class SDKServer {
    */
   async exchangeCodeForToken(
     code: string,
-    state: string
+    state: string,
   ): Promise<ExchangeTokenResponse> {
     return this.oauthService.getTokenByCode(code, state);
   }
@@ -140,7 +140,7 @@ class SDKServer {
     } as ExchangeTokenResponse);
     const loginMethod = this.deriveLoginMethod(
       (data as any)?.platforms,
-      (data as any)?.platform ?? data.platform ?? null
+      (data as any)?.platform ?? data.platform ?? null,
     );
     return {
       ...(data as any),
@@ -170,7 +170,7 @@ class SDKServer {
    */
   async createSessionToken(
     openId: string,
-    options: { expiresInMs?: number; name?: string } = {}
+    options: { expiresInMs?: number; name?: string } = {},
   ): Promise<string> {
     return this.signSession(
       {
@@ -178,13 +178,13 @@ class SDKServer {
         appId: ENV.appId,
         name: options.name || "",
       },
-      options
+      options,
     );
   }
 
   async signSession(
     payload: SessionPayload,
-    options: { expiresInMs?: number } = {}
+    options: { expiresInMs?: number } = {},
   ): Promise<string> {
     const issuedAt = Date.now();
     const expiresInMs = options.expiresInMs ?? ONE_YEAR_MS;
@@ -202,7 +202,7 @@ class SDKServer {
   }
 
   async verifySession(
-    cookieValue: string | undefined | null
+    cookieValue: string | undefined | null,
   ): Promise<{ openId: string; appId: string; name: string } | null> {
     if (!cookieValue) {
       console.warn("[Auth] Missing session cookie");
@@ -237,7 +237,7 @@ class SDKServer {
   }
 
   async getUserInfoWithJwt(
-    jwtToken: string
+    jwtToken: string,
   ): Promise<GetUserInfoWithJwtResponse> {
     const payload: GetUserInfoWithJwtRequest = {
       jwtToken,
@@ -246,12 +246,12 @@ class SDKServer {
 
     const { data } = await this.client.post<GetUserInfoWithJwtResponse>(
       GET_USER_INFO_WITH_JWT_PATH,
-      payload
+      payload,
     );
 
     const loginMethod = this.deriveLoginMethod(
       (data as any)?.platforms,
-      (data as any)?.platform ?? data.platform ?? null
+      (data as any)?.platform ?? data.platform ?? null,
     );
     return {
       ...(data as any),
@@ -334,7 +334,7 @@ export type AuthenticatedUser = User & {
 };
 
 function buildCronUser(
-  userInfo: GetUserInfoWithJwtResponse
+  userInfo: GetUserInfoWithJwtResponse,
 ): AuthenticatedUser {
   const now = new Date();
   return {

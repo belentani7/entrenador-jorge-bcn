@@ -56,7 +56,7 @@ function writeToLogFile(source: LogSource, entries: unknown[]) {
   const logPath = path.join(LOG_DIR, `${source}.log`);
 
   // Format entries with timestamps
-  const lines = entries.map(entry => {
+  const lines = entries.map((entry) => {
     const ts = new Date().toISOString();
     return `[${ts}] ${JSON.stringify(entry)}`;
   });
@@ -107,16 +107,22 @@ function vitePluginManusDebugCollector(): Plugin {
           return next();
         }
 
-        const handlePayload = (payload: unknown) => {
+        const handlePayload = (payload: Record<string, unknown>) => {
+          const entries = (key: string): unknown[] =>
+            Array.isArray(payload[key]) ? (payload[key] as unknown[]) : [];
+
           // Write logs directly to files
-          if (payload.consoleLogs?.length > 0) {
-            writeToLogFile("browserConsole", payload.consoleLogs);
+          const consoleLogs = entries("consoleLogs");
+          if (consoleLogs.length > 0) {
+            writeToLogFile("browserConsole", consoleLogs);
           }
-          if (payload.networkRequests?.length > 0) {
-            writeToLogFile("networkRequests", payload.networkRequests);
+          const networkRequests = entries("networkRequests");
+          if (networkRequests.length > 0) {
+            writeToLogFile("networkRequests", networkRequests);
           }
-          if (payload.sessionEvents?.length > 0) {
-            writeToLogFile("sessionReplay", payload.sessionEvents);
+          const sessionEvents = entries("sessionEvents");
+          if (sessionEvents.length > 0) {
+            writeToLogFile("sessionReplay", sessionEvents);
           }
 
           res.writeHead(200, { "Content-Type": "application/json" });
@@ -126,7 +132,7 @@ function vitePluginManusDebugCollector(): Plugin {
         const reqBody = (req as { body?: unknown }).body;
         if (reqBody && typeof reqBody === "object") {
           try {
-            handlePayload(reqBody);
+            handlePayload(reqBody as Record<string, unknown>);
           } catch (e) {
             res.writeHead(400, { "Content-Type": "application/json" });
             res.end(JSON.stringify({ success: false, error: String(e) }));
@@ -135,7 +141,7 @@ function vitePluginManusDebugCollector(): Plugin {
         }
 
         let body = "";
-        req.on("data", chunk => {
+        req.on("data", (chunk) => {
           body += chunk.toString();
         });
 
@@ -153,68 +159,78 @@ function vitePluginManusDebugCollector(): Plugin {
   };
 }
 
-const plugins = [
-  react(),
-  tailwindcss(),
-  jsxLocPlugin(),
-  vitePluginManusRuntime(),
-  vitePluginManusDebugCollector(),
-];
+/**
+ * The Manus runtime injects ~367 kB of React as an inline script in every
+ * transformed HTML. It is useful for the Manus preview host, but useless (and
+ * render-blocking) on GitHub Pages / Vercel. Keep it in dev only, as documented
+ * by Vite's conditional config API.
+ */
+export default defineConfig(({ command, mode }) => {
+  const isProductionBuild = command === "build" && mode === "production";
+  const plugins = [
+    react(),
+    tailwindcss(),
+    jsxLocPlugin(),
+    ...(isProductionBuild ? [] : [vitePluginManusRuntime()]),
+    vitePluginManusDebugCollector(),
+  ];
 
-export default defineConfig({
-  plugins,
-  resolve: {
-    alias: {
-      "@": path.resolve(import.meta.dirname, "client", "src"),
-      "@shared": path.resolve(import.meta.dirname, "shared"),
-      "@assets": path.resolve(import.meta.dirname, "attached_assets"),
+  return {
+    plugins,
+    resolve: {
+      alias: {
+        "@": path.resolve(import.meta.dirname, "client", "src"),
+        "@shared": path.resolve(import.meta.dirname, "shared"),
+        "@assets": path.resolve(import.meta.dirname, "attached_assets"),
+      },
     },
-  },
-  envDir: path.resolve(import.meta.dirname),
-  root: path.resolve(import.meta.dirname, "client"),
-  base: process.env.GITHUB_ACTIONS ? "/entrenador-jorge-bcn/" : "/",
-  publicDir: path.resolve(import.meta.dirname, "client", "public"),
-  build: {
-    outDir: path.resolve(import.meta.dirname, "dist/public"),
-    emptyOutDir: true,
-    chunkSizeWarningLimit: 550,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          react: ["react", "react-dom"],
-          trpc: [
-            "@trpc/client",
-            "@trpc/react-query",
-            "@tanstack/react-query",
-            "superjson",
-          ],
-          motion: ["gsap", "framer-motion"],
-          icons: ["lucide-react"],
-          ui: [
-            "@radix-ui/react-tooltip",
-            "@radix-ui/react-slot",
-            "sonner",
-            "wouter",
-            "next-themes",
-          ],
+    envDir: path.resolve(import.meta.dirname),
+    root: path.resolve(import.meta.dirname, "client"),
+    base: process.env.GITHUB_ACTIONS ? "/entrenador-jorge-bcn/" : "/",
+    publicDir: path.resolve(import.meta.dirname, "client", "public"),
+    build: {
+      outDir: path.resolve(import.meta.dirname, "dist/public"),
+      emptyOutDir: true,
+      chunkSizeWarningLimit: 550,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            react: ["react", "react-dom"],
+            trpc: [
+              "@trpc/client",
+              "@trpc/react-query",
+              "@tanstack/react-query",
+              "superjson",
+            ],
+            motion: ["gsap", "framer-motion"],
+            icons: ["lucide-react"],
+            ui: [
+              "@radix-ui/react-tooltip",
+              "@radix-ui/react-slot",
+              "sonner",
+              "wouter",
+              "next-themes",
+            ],
+          },
         },
       },
     },
-  },
-  server: {
-    host: true,
-    allowedHosts: [
-      ".manuspre.computer",
-      ".manus.computer",
-      ".manus-asia.computer",
-      ".manuscomputer.ai",
-      ".manusvm.computer",
-      "localhost",
-      "127.0.0.1",
-    ],
-    fs: {
-      strict: true,
-      deny: ["**/.*"],
+    server: {
+      host: true,
+      allowedHosts: [
+        ".manuspre.computer",
+        ".manus.computer",
+        ".manus-asia.computer",
+        ".manuscomputer.ai",
+        ".manusvm.computer",
+        ".e2b.app",
+        "localhost",
+        "127.0.0.1",
+      ],
+      fs: {
+        strict: true,
+        deny: ["**/.*"],
+      },
     },
-  },
+  };
 });

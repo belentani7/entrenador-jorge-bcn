@@ -24,7 +24,7 @@ function getMapsConfig(): MapsConfig {
 
   if (!baseUrl || !apiKey) {
     throw new Error(
-      "Google Maps proxy credentials missing: set BUILT_IN_FORGE_API_URL and BUILT_IN_FORGE_API_KEY"
+      "Google Maps proxy credentials missing: set BUILT_IN_FORGE_API_URL and BUILT_IN_FORGE_API_KEY",
     );
   }
 
@@ -54,7 +54,7 @@ interface RequestOptions {
 export async function makeRequest<T = unknown>(
   endpoint: string,
   params: Record<string, unknown> = {},
-  options: RequestOptions = {}
+  options: RequestOptions = {},
 ): Promise<T> {
   const { baseUrl, apiKey } = getMapsConfig();
 
@@ -82,7 +82,7 @@ export async function makeRequest<T = unknown>(
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(
-      `Google Maps API request failed (${response.status} ${response.statusText}): ${errorText}`
+      `Google Maps API request failed (${response.status} ${response.statusText}): ${errorText}`,
     );
   }
 

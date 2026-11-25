@@ -76,7 +76,7 @@ export type TranscriptionError = {
  * @returns Transcription result or error
  */
 export async function transcribeAudio(
-  options: TranscribeOptions
+  options: TranscribeOptions,
 ): Promise<TranscriptionResponse | TranscriptionError> {
   try {
     // Step 1: Validate environment configuration

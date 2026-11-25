@@ -3,14 +3,14 @@ type EmailPayload = { to: string; subject: string; html: string };
 const escapeHtml = (value: string) =>
   value.replace(
     /[&<>"']/g,
-    character =>
+    (character) =>
       ({
         "&": "&amp;",
         "<": "&lt;",
         ">": "&gt;",
         '"': "&quot;",
         "'": "&#039;",
-      })[character] ?? character
+      })[character] ?? character,
   );
 
 export async function sendTransactionalEmail(payload: EmailPayload) {
@@ -53,13 +53,13 @@ export function confirmationEmail(name: string, date?: string, time?: string) {
 
 export function ownerSubmissionEmail(
   title: string,
-  details: Record<string, string>
+  details: Record<string, string>,
 ) {
   const safeTitle = escapeHtml(title);
   const rows = Object.entries(details)
     .map(
       ([label, value]) =>
-        `<li><strong>${escapeHtml(label)}:</strong> ${escapeHtml(value)}</li>`
+        `<li><strong>${escapeHtml(label)}:</strong> ${escapeHtml(value)}</li>`,
     )
     .join("");
   return `<div style="font-family:Arial,sans-serif;color:#111;line-height:1.6"><h1 style="color:#ff5b1a">${safeTitle}</h1><ul>${rows}</ul></div>`;

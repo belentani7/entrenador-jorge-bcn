@@ -11,7 +11,7 @@ describe("transactional email fallback", () => {
         to: "test@example.com",
         subject: "Test",
         html: confirmationEmail("Jorge"),
-      })
+      }),
     ).resolves.toBe(false);
     if (previous) process.env.RESEND_API_KEY = previous;
   });
@@ -55,7 +55,7 @@ describe("transactional email fallback", () => {
         to: "test@example.com",
         subject: "Test",
         html: "<p>Test</p>",
-      })
+      }),
     ).resolves.toBe(false);
     fetchSpy.mockRestore();
     warningSpy.mockRestore();
