@@ -17,7 +17,7 @@ import {
 
 export function resolveOwnerNotification(
   internalNotified: boolean,
-  ownerEmailSent: boolean
+  ownerEmailSent: boolean,
 ) {
   return {
     notified: internalNotified || ownerEmailSent,
@@ -35,14 +35,14 @@ const bookingTimes = ["07:00", "09:00", "13:30", "18:00", "19:30"] as const;
 const bookingDate = z
   .string()
   .regex(/^\d{4}-\d{2}-\d{2}$/)
-  .refine(value => value >= new Date().toISOString().slice(0, 10), {
+  .refine((value) => value >= new Date().toISOString().slice(0, 10), {
     message: "La fecha debe ser hoy o posterior.",
   });
 
 export const appRouter = router({
   system: systemRouter,
   auth: router({
-    me: publicProcedure.query(opts => opts.ctx.user),
+    me: publicProcedure.query((opts) => opts.ctx.user),
     logout: publicProcedure.mutation(({ ctx }) => {
       const cookieOptions = getSessionCookieOptions(ctx.req);
       ctx.res.clearCookie(COOKIE_NAME, { ...cookieOptions, maxAge: -1 });
@@ -56,7 +56,7 @@ export const appRouter = router({
           ...contactFields,
           goal: z.string().trim().min(2).max(500),
           preferredTime: z.string().trim().min(2).max(60),
-        })
+        }),
       )
       .mutation(async ({ input }) => {
         const result = await createLead(input);
@@ -85,7 +85,7 @@ export const appRouter = router({
           : false;
         const ownerNotification = resolveOwnerNotification(
           notified,
-          ownerEmailSent
+          ownerEmailSent,
         );
         return {
           success: true,
@@ -103,12 +103,12 @@ export const appRouter = router({
           ...contactFields,
           date: bookingDate,
           time: z.enum(bookingTimes),
-        })
+        }),
       )
       .mutation(async ({ input }) => {
         if (await hasBooking(input.date, input.time))
           throw new Error(
-            "Ese horario ya tiene una solicitud. Elige otro momento."
+            "Ese horario ya tiene una solicitud. Elige otro momento.",
           );
         const result = await createBooking({ ...input, status: "pending" });
         const notified = await notifyOwner({
@@ -125,21 +125,18 @@ export const appRouter = router({
           ? await sendTransactionalEmail({
               to: ownerEmail,
               subject: "Nueva solicitud de primera sesión · Jorge Performance",
-              html: ownerSubmissionEmail(
-                "Nueva solicitud de primera sesión",
-                {
-                  Nombre: input.name,
-                  Email: input.email,
-                  Teléfono: input.phone,
-                  Fecha: input.date,
-                  Hora: input.time,
-                }
-              ),
+              html: ownerSubmissionEmail("Nueva solicitud de primera sesión", {
+                Nombre: input.name,
+                Email: input.email,
+                Teléfono: input.phone,
+                Fecha: input.date,
+                Hora: input.time,
+              }),
             })
           : false;
         const ownerNotification = resolveOwnerNotification(
           notified,
-          ownerEmailSent
+          ownerEmailSent,
         );
         return {
           success: true,

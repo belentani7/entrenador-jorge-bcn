@@ -13,10 +13,10 @@ describe("fitness assistant", () => {
 
   it("understands common spelling mistakes", () => {
     expect(answerFitnessQuestion("que hago si me duele la rodila").topic).toBe(
-      "salud"
+      "salud",
     );
     expect(answerFitnessQuestion("organizame una rutna semanal").topic).toBe(
-      "rutina"
+      "rutina",
     );
   });
 
@@ -64,7 +64,7 @@ describe("fitness assistant", () => {
       const answer = answerFitnessQuestion(topic);
       expect(answer.resolution?.objective).toBeTruthy();
       expect(answer.resolution?.steps.length).toBeLessThanOrEqual(
-        RESOLUTION_POLICY.maxStepsPerAnswer
+        RESOLUTION_POLICY.maxStepsPerAnswer,
       );
       expect(answer.resolution?.nextAction).toBeTruthy();
       expect(answer.resolution?.closure).toBeTruthy();

@@ -41,7 +41,7 @@ export type GenerateImageResponse = {
 };
 
 export async function generateImage(
-  options: GenerateImageOptions
+  options: GenerateImageOptions,
 ): Promise<GenerateImageResponse> {
   if (!ENV.forgeApiUrl) {
     throw new Error("BUILT_IN_FORGE_API_URL is not configured");
@@ -56,7 +56,7 @@ export async function generateImage(
     : `${ENV.forgeApiUrl}/`;
   const fullUrl = new URL(
     "images.v1.ImageService/GenerateImage",
-    baseUrl
+    baseUrl,
   ).toString();
 
   const model = options.model ?? DEFAULT_IMAGE_MODEL;
@@ -83,7 +83,7 @@ export async function generateImage(
   if (!response.ok) {
     const detail = await response.text().catch(() => "");
     throw new Error(
-      `Image generation request failed (${response.status} ${response.statusText})${detail ? `: ${detail}` : ""}`
+      `Image generation request failed (${response.status} ${response.statusText})${detail ? `: ${detail}` : ""}`,
     );
   }
 
@@ -100,7 +100,7 @@ export async function generateImage(
   const { url } = await storagePut(
     `generated/${Date.now()}.png`,
     buffer,
-    result.image.mimeType
+    result.image.mimeType,
   );
   return {
     url,
@@ -135,7 +135,7 @@ export async function listImageModels(): Promise<ListImageModelsResponse> {
     : `${ENV.forgeApiUrl}/`;
   const fullUrl = new URL(
     "images.v1.ImageService/ListModels",
-    baseUrl
+    baseUrl,
   ).toString();
 
   const response = await fetch(fullUrl, {
@@ -152,7 +152,7 @@ export async function listImageModels(): Promise<ListImageModelsResponse> {
   if (!response.ok) {
     const detail = await response.text().catch(() => "");
     throw new Error(
-      `List image models failed (${response.status} ${response.statusText})${detail ? `: ${detail}` : ""}`
+      `List image models failed (${response.status} ${response.statusText})${detail ? `: ${detail}` : ""}`,
     );
   }
 

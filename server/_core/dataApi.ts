@@ -15,7 +15,7 @@ export type DataApiCallOptions = {
 
 export async function callDataApi(
   apiId: string,
-  options: DataApiCallOptions = {}
+  options: DataApiCallOptions = {},
 ): Promise<unknown> {
   if (!ENV.forgeApiUrl) {
     throw new Error("BUILT_IN_FORGE_API_URL is not configured");
@@ -30,7 +30,7 @@ export async function callDataApi(
     : `${ENV.forgeApiUrl}/`;
   const fullUrl = new URL(
     "webdevtoken.v1.WebDevService/CallApi",
-    baseUrl
+    baseUrl,
   ).toString();
 
   const response = await fetch(fullUrl, {
@@ -53,7 +53,7 @@ export async function callDataApi(
   if (!response.ok) {
     const detail = await response.text().catch(() => "");
     throw new Error(
-      `Data API request failed (${response.status} ${response.statusText})${detail ? `: ${detail}` : ""}`
+      `Data API request failed (${response.status} ${response.statusText})${detail ? `: ${detail}` : ""}`,
     );
   }
 

@@ -84,8 +84,8 @@ export async function hasBooking(date: string, time: string) {
       and(
         eq(bookings.date, date),
         eq(bookings.time, time),
-        ne(bookings.status, "cancelled")
-      )
+        ne(bookings.status, "cancelled"),
+      ),
     )
     .limit(1);
   return result.length > 0;

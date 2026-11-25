@@ -18,6 +18,10 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with:
+          # gitleaks-action scans baseRef^..headRef on pull requests; a shallow
+          # checkout makes that range invalid and exits with code 1.
+          fetch-depth: 0
       - name: Run Gitleaks
         uses: gitleaks/gitleaks-action@v2
         env:

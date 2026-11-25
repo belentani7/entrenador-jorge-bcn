@@ -23,7 +23,7 @@ describe("database availability boundary", () => {
         phone: "+34600000000",
         goal: "Prueba",
         preferredTime: "Flexible",
-      })
+      }),
     ).rejects.toThrow("Database is not configured or unavailable.");
   });
 });

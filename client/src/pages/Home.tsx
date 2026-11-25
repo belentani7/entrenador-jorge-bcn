@@ -28,7 +28,7 @@ const storyImage =
   "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=1200&q=85";
 
 const minBookingDate = new Date(
-  Date.now() - new Date().getTimezoneOffset() * 60_000
+  Date.now() - new Date().getTimezoneOffset() * 60_000,
 )
   .toISOString()
   .slice(0, 10);
@@ -42,7 +42,7 @@ type PublicProcedureResponse<T> = {
 
 async function postPublicProcedure<T>(
   path: string,
-  input: unknown
+  input: unknown,
 ): Promise<T> {
   const response = await fetch(`/api/trpc/${path}?batch=1`, {
     method: "POST",
@@ -109,6 +109,15 @@ export default function Home() {
   });
 
   useEffect(() => {
+    // GSAP writes inline transforms/opacity, so the CSS media query alone
+    // cannot disable these animations for people who prefer reduced motion.
+    if (
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+
     const ctx = gsap.context(() => {
       gsap.from(".hero-copy > *", {
         y: 34,
@@ -117,7 +126,7 @@ export default function Home() {
         stagger: 0.1,
         ease: "power3.out",
       });
-      gsap.utils.toArray<HTMLElement>(".reveal").forEach(el => {
+      gsap.utils.toArray<HTMLElement>(".reveal").forEach((el) => {
         gsap.from(el, {
           y: 50,
           opacity: 0,
@@ -126,14 +135,14 @@ export default function Home() {
           scrollTrigger: { trigger: el, start: "top 82%", once: true },
         });
       });
-      gsap.utils.toArray<HTMLElement>(".parallax").forEach(el => {
+      gsap.utils.toArray<HTMLElement>(".parallax").forEach((el) => {
         gsap.to(el, {
           yPercent: -12,
           ease: "none",
           scrollTrigger: { trigger: el, scrub: true },
         });
       });
-      gsap.utils.toArray<HTMLElement>(".stat-number").forEach(el => {
+      gsap.utils.toArray<HTMLElement>(".stat-number").forEach((el) => {
         const value = Number(el.dataset.value || 0);
         const counter = { value: 0 };
         gsap.to(counter, {
@@ -160,20 +169,20 @@ export default function Home() {
       !lead.preferredTime
     )
       return toast.error(
-        "Completa todos los campos para que Jorge pueda contactarte."
+        "Completa todos los campos para que Jorge pueda contactarte.",
       );
     setLeadSubmitting(true);
     void postPublicProcedure<{
       ownerNotified: boolean;
     }>("leads.create", lead)
-      .then(result => {
+      .then((result) => {
         if (result.ownerNotified) {
           toast.success(
-            "Gracias. Jorge ha recibido tu consulta y te escribirá pronto."
+            "Gracias. Jorge ha recibido tu consulta y te escribirá pronto.",
           );
         } else {
           toast.warning(
-            "Tu consulta se ha guardado, pero el aviso automático a Jorge no está disponible. La respuesta podría demorarse."
+            "Tu consulta se ha guardado, pero el aviso automático a Jorge no está disponible. La respuesta podría demorarse.",
           );
         }
         setLead({
@@ -184,12 +193,12 @@ export default function Home() {
           preferredTime: "",
         });
       })
-      .catch(error =>
+      .catch((error) =>
         toast.error(
           error instanceof Error
             ? error.message
-            : "No se pudo enviar el formulario. Inténtalo de nuevo."
-        )
+            : "No se pudo enviar el formulario. Inténtalo de nuevo.",
+        ),
       )
       .finally(() => setLeadSubmitting(false));
   };
@@ -213,26 +222,29 @@ export default function Home() {
       success: true;
       ownerNotified: boolean;
     }>("bookings.create", bookingPayload)
-      .then(result => {
+      .then((result) => {
         toast.success(
           result.ownerNotified
             ? "Solicitud recibida. Jorge ha sido notificado y confirmará tu sesión."
-            : "Tu solicitud se ha guardado, pero el aviso automático a Jorge no está disponible. La respuesta podría demorarse."
+            : "Tu solicitud se ha guardado, pero el aviso automático a Jorge no está disponible. La respuesta podría demorarse.",
         );
         setBooking({ name: "", email: "", phone: "", date: "", time: "" });
       })
-      .catch(error =>
+      .catch((error) =>
         toast.error(
           error instanceof Error
             ? error.message
-            : "Ese horario no está disponible."
-        )
+            : "Ese horario no está disponible.",
+        ),
       )
       .finally(() => setBookingSubmitting(false));
   };
 
   return (
     <div ref={root} className="site-shell">
+      <a className="skip-link" href="#contenido">
+        Saltar al contenido
+      </a>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -255,17 +267,15 @@ export default function Home() {
           </span>
         </a>
         <nav className={menuOpen ? "nav-links nav-open" : "nav-links"}>
-          {["Historia", "Servicios", "Método", "Reserva"].map(
-            item => (
-              <a
-                key={item}
-                href={`#${item.toLowerCase().replace("ó", "o")}`}
-                onClick={() => setMenuOpen(false)}
-              >
-                {item}
-              </a>
-            )
-          )}
+          {["Historia", "Servicios", "Método", "Reserva"].map((item) => (
+            <a
+              key={item}
+              href={`#${item.toLowerCase().replace("ó", "o")}`}
+              onClick={() => setMenuOpen(false)}
+            >
+              {item}
+            </a>
+          ))}
         </nav>
         <a className="nav-cta" href="#reserva">
           Reserva tu sesión <ArrowRight size={16} />
@@ -273,14 +283,14 @@ export default function Home() {
         <button
           className="menu-button"
           onClick={() => setMenuOpen(!menuOpen)}
-                aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
-                aria-expanded={menuOpen}
+          aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+          aria-expanded={menuOpen}
         >
           {menuOpen ? <X /> : <Menu />}
         </button>
       </header>
 
-      <main>
+      <main id="contenido" tabIndex={-1}>
         <section id="inicio" className="hero-section">
           <div className="hero-media">
             <img
@@ -489,17 +499,26 @@ export default function Home() {
               <article>
                 <span>01</span>
                 <h3>Un punto de partida real</h3>
-                <p>Definimos objetivos y adaptamos el plan a tu experiencia, tiempo y contexto.</p>
+                <p>
+                  Definimos objetivos y adaptamos el plan a tu experiencia,
+                  tiempo y contexto.
+                </p>
               </article>
               <article>
                 <span>02</span>
                 <h3>Práctica con intención</h3>
-                <p>Trabajamos técnica, fuerza y hábitos con una carga que puedas mantener.</p>
+                <p>
+                  Trabajamos técnica, fuerza y hábitos con una carga que puedas
+                  mantener.
+                </p>
               </article>
               <article>
                 <span>03</span>
                 <h3>Revisión y ajustes</h3>
-                <p>Revisamos sensaciones y progreso para decidir juntos el siguiente paso.</p>
+                <p>
+                  Revisamos sensaciones y progreso para decidir juntos el
+                  siguiente paso.
+                </p>
               </article>
             </div>
           </div>
@@ -555,7 +574,7 @@ export default function Home() {
                 <input
                   required
                   value={booking.name}
-                  onChange={e =>
+                  onChange={(e) =>
                     setBooking({ ...booking, name: e.target.value })
                   }
                   placeholder="Tu nombre"
@@ -567,7 +586,7 @@ export default function Home() {
                   required
                   type="email"
                   value={booking.email}
-                  onChange={e =>
+                  onChange={(e) =>
                     setBooking({ ...booking, email: e.target.value })
                   }
                   placeholder="tu@email.com"
@@ -581,7 +600,7 @@ export default function Home() {
                     min={minBookingDate}
                     type="date"
                     value={booking.date}
-                    onChange={e =>
+                    onChange={(e) =>
                       setBooking({ ...booking, date: e.target.value })
                     }
                   />
@@ -591,7 +610,7 @@ export default function Home() {
                   <select
                     required
                     value={booking.time}
-                    onChange={e =>
+                    onChange={(e) =>
                       setBooking({
                         ...booking,
                         time: e.target.value as "" | BookingTime,
@@ -612,7 +631,7 @@ export default function Home() {
                 <input
                   required
                   value={booking.phone}
-                  onChange={e =>
+                  onChange={(e) =>
                     setBooking({ ...booking, phone: e.target.value })
                   }
                   placeholder="+34…"
@@ -657,7 +676,7 @@ export default function Home() {
                 <input
                   required
                   value={lead.name}
-                  onChange={e => setLead({ ...lead, name: e.target.value })}
+                  onChange={(e) => setLead({ ...lead, name: e.target.value })}
                   placeholder="Tu nombre"
                 />
               </label>
@@ -667,7 +686,7 @@ export default function Home() {
                   required
                   type="email"
                   value={lead.email}
-                  onChange={e => setLead({ ...lead, email: e.target.value })}
+                  onChange={(e) => setLead({ ...lead, email: e.target.value })}
                   placeholder="tu@email.com"
                 />
               </label>
@@ -677,7 +696,9 @@ export default function Home() {
                   <input
                     required
                     value={lead.phone}
-                    onChange={e => setLead({ ...lead, phone: e.target.value })}
+                    onChange={(e) =>
+                      setLead({ ...lead, phone: e.target.value })
+                    }
                     placeholder="+34…"
                   />
                 </label>
@@ -686,7 +707,7 @@ export default function Home() {
                   <input
                     required
                     value={lead.goal}
-                    onChange={e => setLead({ ...lead, goal: e.target.value })}
+                    onChange={(e) => setLead({ ...lead, goal: e.target.value })}
                     placeholder="Ganar fuerza"
                   />
                 </label>
@@ -696,7 +717,7 @@ export default function Home() {
                 <select
                   required
                   value={lead.preferredTime}
-                  onChange={e =>
+                  onChange={(e) =>
                     setLead({ ...lead, preferredTime: e.target.value })
                   }
                 >

@@ -17,7 +17,7 @@ const buildEndpointUrl = (baseUrl: string): string => {
   const normalizedBase = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
   return new URL(
     "webdevtoken.v1.WebDevService/SendNotification",
-    normalizedBase
+    normalizedBase,
   ).toString();
 };
 
@@ -62,13 +62,13 @@ const validatePayload = (input: NotificationPayload): NotificationPayload => {
  * bubble up as TRPC errors so callers can fix the payload.
  */
 export async function notifyOwner(
-  payload: NotificationPayload
+  payload: NotificationPayload,
 ): Promise<boolean> {
   const { title, content } = validatePayload(payload);
 
   if (!ENV.forgeApiUrl || !ENV.forgeApiKey) {
     console.warn(
-      "[Notification] Internal notification service is not configured; using fallback channel."
+      "[Notification] Internal notification service is not configured; using fallback channel.",
     );
     return false;
   }
@@ -92,7 +92,7 @@ export async function notifyOwner(
       console.warn(
         `[Notification] Failed to notify owner (${response.status} ${response.statusText})${
           detail ? `: ${detail}` : ""
-        }`
+        }`,
       );
       return false;
     }

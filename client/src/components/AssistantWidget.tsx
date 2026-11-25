@@ -71,7 +71,7 @@ export default function AssistantWidget() {
           }
         : answer;
     const nextId = messageId + 1;
-    setMessages(current => [
+    setMessages((current) => [
       ...current,
       { id: messageId, role: "user", text: cleanValue },
       {
@@ -121,7 +121,7 @@ export default function AssistantWidget() {
           </header>
 
           <div className="assistant-messages" aria-live="polite">
-            {messages.map(message => (
+            {messages.map((message) => (
               <div
                 key={message.id}
                 className={`assistant-message ${message.role}`}
@@ -139,7 +139,7 @@ export default function AssistantWidget() {
                       <ol>
                         {message.answer.resolution.steps
                           .slice(0, RESOLUTION_POLICY.maxStepsPerAnswer)
-                          .map(step => (
+                          .map((step) => (
                             <li key={step}>{step}</li>
                           ))}
                       </ol>
@@ -169,7 +169,7 @@ export default function AssistantWidget() {
           </div>
 
           <div className="assistant-quick-actions">
-            {quickQuestions.map(question => (
+            {quickQuestions.map((question) => (
               <button key={question} onClick={() => sendMessage(question)}>
                 {question}
               </button>
@@ -178,7 +178,7 @@ export default function AssistantWidget() {
 
           <form
             className="assistant-form"
-            onSubmit={event => {
+            onSubmit={(event) => {
               event.preventDefault();
               sendMessage();
             }}
@@ -186,7 +186,7 @@ export default function AssistantWidget() {
             <input
               ref={inputRef}
               value={input}
-              onChange={event => setInput(event.target.value)}
+              onChange={(event) => setInput(event.target.value)}
               required
               maxLength={500}
               placeholder="Escribe tu pregunta…"
@@ -207,7 +207,7 @@ export default function AssistantWidget() {
       {!open && <div className="assistant-hint">¿Te ayudo a empezar?</div>}
       <button
         className="assistant-launcher"
-        onClick={() => setOpen(current => !current)}
+        onClick={() => setOpen((current) => !current)}
         aria-label={open ? "Cerrar asistente IA" : "Abrir asistente IA"}
         aria-expanded={open}
       >

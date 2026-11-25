@@ -28,7 +28,7 @@ export const RESOLUTION_POLICY = {
 
 export const advanceResolution = (
   state: ResolutionState,
-  topic: AssistantTopic
+  topic: AssistantTopic,
 ): ResolutionState => {
   const continuing = state.topic === topic;
   const turn = continuing ? state.turn + 1 : 1;
@@ -50,7 +50,7 @@ export const resolutionPlanFor = (
     | "mitos"
     | "jorge"
     | "reserva"
-    | "seguridad"
+    | "seguridad",
 ): ResolutionPlan => {
   switch (topic) {
     case "salud":

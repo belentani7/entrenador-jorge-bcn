@@ -195,14 +195,14 @@ const userContexts = [
   "si necesito una planificación semanal",
   "si quiero hablar con Jorge",
 ];
-const knowledgeBase = seeds.flatMap(seed =>
-  questionFrames.flatMap(frame =>
-    userContexts.map(context => ({
+const knowledgeBase = seeds.flatMap((seed) =>
+  questionFrames.flatMap((frame) =>
+    userContexts.map((context) => ({
       question: `${frame.replace("{keyword}", seed.keywords[0])} ${context}`,
       topic: seed.topic,
       answer: seed.answer,
-    }))
-  )
+    })),
+  ),
 );
 
 const normalize = (value: string) =>
@@ -217,15 +217,15 @@ const normalize = (value: string) =>
 const distance = (a: string, b: string) => {
   const matrix = Array.from({ length: b.length + 1 }, (_, row) =>
     Array.from({ length: a.length + 1 }, (_, column) =>
-      row === 0 ? column : column === 0 ? row : 0
-    )
+      row === 0 ? column : column === 0 ? row : 0,
+    ),
   );
   for (let row = 1; row <= b.length; row += 1) {
     for (let column = 1; column <= a.length; column += 1) {
       matrix[row][column] = Math.min(
         matrix[row - 1][column] + 1,
         matrix[row][column - 1] + 1,
-        matrix[row - 1][column - 1] + (b[row - 1] === a[column - 1] ? 0 : 1)
+        matrix[row - 1][column - 1] + (b[row - 1] === a[column - 1] ? 0 : 1),
       );
     }
   }
@@ -240,7 +240,7 @@ const scoreSeed = (question: string, seed: KnowledgeSeed) => {
     if (normalizedQuestion.includes(target)) return score + 4;
     const closest = words.reduce(
       (best, word) => Math.min(best, distance(word, target)),
-      target.length
+      target.length,
     );
     return (
       score + (closest <= Math.max(1, Math.floor(target.length / 4)) ? 2 : 0)
@@ -265,7 +265,7 @@ export function answerFitnessQuestion(question: string): AssistantAnswer {
 
   if (
     /(suicid|me quiero morir|hacerme dano|hacerme daño|emergencia|urgencia)/i.test(
-      normalized
+      normalized,
     )
   ) {
     return {
@@ -278,7 +278,7 @@ export function answerFitnessQuestion(question: string): AssistantAnswer {
   }
 
   const best = seeds
-    .map(seed => ({ seed, score: scoreSeed(question, seed) }))
+    .map((seed) => ({ seed, score: scoreSeed(question, seed) }))
     .sort((left, right) => right.score - left.score)[0];
 
   if (!best || best.score < 2) {
