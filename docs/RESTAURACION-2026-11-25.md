@@ -94,3 +94,13 @@ No se alcanza con la configuración por defecto de Lighthouse (89). Evidencia de
 Contrato cumplido: build limpio, tests verdes, doctor y catálogo en verde, formato limpio, CI real, HTML de entrada reparado, servidor de producción funcional, métricas documentadas y publicación preparada desde la rama de trabajo contra `main`.
 
 Riesgos pendientes: credenciales de Resend/Base de datos/OAuth fuera del repo (necesarias para notificaciones y backend), dependencia de hosts de imágenes externos, aviso de peer dependency preexistente de `@builder.io/vite-plugin-jsx-loc` con Vite 7, aviso de deprecación de Recharts 2, y `gitleaks` no instalado localmente (sí se ejecuta en el workflow `hygiene.yml` de CI).
+
+### Incidencias de CI resueltas antes de publicar
+
+- Primer PR: `verify` fallaba en `Auditoría de estructura` porque `CONTRIBUTING.md` y `CODE_OF_CONDUCT.md` están listados en `.gitignore`; se versionaron con `git add -f`. `doctor.py` pasó de 43/47 a 47/47 en CI.
+- `gitleaks` terminaba con `ERROR: Unexpected exit code [1]`: el action escanea `baseRef^..headRef` pero `actions/checkout@v4` usa profundidad 1. Se añadió `fetch-depth: 0` en `.github/workflows/hygiene.yml`; el job pasó en 11 s.
+- Tras ambos fixes: `verify`, `gitleaks`, `conflict-markers`, CodeQL, Vercel y Netlify en verde. `gitleaks detect --source .` en local: `no leaks found`.
+
+### Publicación en `main`
+
+PR https://github.com/belentani7/entrenador-jorge-bcn/pull/17 fusionada el 2026-11-25T06:44:51Z (commit de merge `99832eaa17c72ca2fcca546e5cfa97044c7b94f9`). Workflow `Deploy frontend to GitHub Pages` completado: build 26 s + deploy 9 s, ambos en verde. La URL pública sirve la landing React con el skip-link, hero, servicios, reserva y asistente (verificado con `fetch_page` sobre `https://belentani7.github.io/entrenador-jorge-bcn/`, que responde desde `www.belentani.es/entrenador-jorge-bcn/`).
